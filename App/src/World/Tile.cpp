@@ -4,6 +4,8 @@ Tile::Tile()
 	: m_rotate{ Quaternion::RotateY(60_deg) }
 	, m_bridgeModel{ U"image/bridge.obj" }
 	, m_grassModel{ U"image/grass.obj" }
+	, m_house1Model{ U"image/building-house.obj" }
+	, m_house2Model{ U"image/building-village.obj" }
 {
 	Model::RegisterDiffuseTextures(m_bridgeModel, TextureDesc::MippedSRGB);		//テクスチャ
 }

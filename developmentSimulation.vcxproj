@@ -116,6 +116,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="App\src\Core\Game.cpp" />
+    <ClCompile Include="App\src\Player\CameraController.cpp" />
     <ClCompile Include="App\src\World\Tile.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -330,6 +331,7 @@
     <ClInclude Include="App\src\Core\Config.hpp" />
     <ClInclude Include="App\src\Core\Game.hpp" />
     <ClInclude Include="App\src\Player\CameraController.h" />
+    <ClInclude Include="App\src\Player\PlayerInput.hpp" />
     <ClInclude Include="App\src\World\Tile.hpp" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>

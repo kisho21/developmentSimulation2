@@ -3,6 +3,7 @@
 Game::Game()
 	: m_renderTexture{ Scene::Size(),TextureFormat::R8G8B8A8_Unorm_SRGB,HasDepth::Yes }
 	, m_cam{ m_renderTexture.size(), Config::CamFOV, Config::CamInitialPosition }
+	, m_cameraController{ m_cam }
 	, m_ps{ HLSL{ U"example/shader/hlsl/forward_triplanar.hlsl",U"PS"} }
 	, m_tex{ U"example/texture/uv.png" }
 {
@@ -19,7 +20,8 @@ void Game::initLighting() const
 
 bool Game::Update()
 {
-	m_cam.update(2.0);
+	m_cameraController.Update(Scene::DeltaTime());
+	//m_cam.update(2.0);
 	Graphics3D::SetCameraTransform(m_cam);
 
 	return true;

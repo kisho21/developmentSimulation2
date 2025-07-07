@@ -16,6 +16,7 @@ public:
 private:
 	MSRenderTexture m_renderTexture;
 	DebugCamera3D m_cam;
+	CameraController m_cameraController;
 
 	PixelShader m_ps;
 	Texture m_tex;
