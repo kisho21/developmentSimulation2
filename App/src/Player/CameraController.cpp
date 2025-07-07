@@ -13,17 +13,17 @@ CameraController::CameraController(BasicCamera3D& cam)
 
 void CameraController::Update(double deltaTime)
 {
-	bool isRightDrag = MouseR.pressed();
-	Vec2 mouseDelta = isRightDrag ? PlayerInput::mouseDelta() : Vec2{ 0,0 };
+	bool isLeftDrag = MouseL.pressed();
+	Vec2 mouseDelta = isLeftDrag ? PlayerInput::mouseDelta() : Vec2{ 0,0 };
 
 	if (Abs(mouseDelta.x) < 0.01) mouseDelta.x = 0.0;
 	if (Abs(mouseDelta.y) < 0.01) mouseDelta.y = 0.0;
 
-	m_yaw -= mouseDelta.x * Config::CamRotateSpeed;
-	m_pitch -= mouseDelta.y * Config::CamRotateSpeed;
+	m_yaw += mouseDelta.x * Config::CamRotateSpeed;
+	m_pitch += mouseDelta.y * Config::CamRotateSpeed;
 	m_pitch = Clamp(m_pitch, -PitchLimit, PitchLimit);
 
-	if (isRightDrag) {
+	if (isLeftDrag) {
 		Cursor::RequestStyle(CursorStyle::Default);
 	}
 
