@@ -38,7 +38,7 @@ void Game::Draw() const
 		Graphics3D::SetPSTexture(0, m_tex);
 
 		
-		tile.Draw();	//←連続してアセットを読み込んでいる、ここから
+		tile.Draw();
 	}
 	
 	//2D転送
