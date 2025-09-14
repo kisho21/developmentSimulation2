@@ -162,6 +162,18 @@
     <ClCompile Include="App\src\Util\RayCaster.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="App\src\Core\SceneChangeManager.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App\src\Core\SceneTitle.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App\src\Core\SceneGame.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App\src\Core\Fader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -852,6 +864,18 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\World\Grid.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Core\SceneChangeManager.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Core\SceneTitle.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Core\SceneGame.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Core\Fader.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
