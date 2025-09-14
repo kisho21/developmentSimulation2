@@ -153,6 +153,15 @@
     <ClCompile Include="App\src\Player\CameraController.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="App\src\Ui\InfoUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App\src\Ui\ArchitectUi.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App\src\Util\RayCaster.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -831,6 +840,18 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Player\PlayerInput.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Ui\InfoUi.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Ui\ArchitectUi.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Util\RayCaster.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\World\Grid.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

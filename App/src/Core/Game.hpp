@@ -3,8 +3,12 @@
 #include "Config.hpp"
 #include "../Player/CameraController.h"
 #include "../World/Tile.hpp"
+#include "../Ui/InfoUi.hpp"
+#include "../Ui/ArchitectUi.hpp"
 
 class Tile;
+class InfoUi;
+class ArchitectUi;
 
 class Game
 {
@@ -23,5 +27,7 @@ private:
 
 	void initLighting() const;
 
+	InfoUi infoUi;
 	Tile tile;
+	//ArchitectUi architectUi;
 };

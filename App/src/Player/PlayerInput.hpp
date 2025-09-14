@@ -11,3 +11,4 @@ struct PlayerInput
 	static bool KeyUp() { return KeySpace.pressed(); }
 	static bool KeyDown() { return KeyShift.pressed(); }
 };
+

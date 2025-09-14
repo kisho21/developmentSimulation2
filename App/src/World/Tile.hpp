@@ -1,11 +1,14 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
+#include "Grid.hpp"
 
 class Tile
 {
 public:
 	Tile();
 	void Draw() const;
+
+	Optional<TileGrid> getGridPosFromWorldPos(const Vec3& worldPos) const;
 
 private:
 	Quaternion m_rotate;
