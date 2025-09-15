@@ -8,7 +8,7 @@ InfoUi::InfoUi()
 
 void InfoUi::setResources(const std::map<ResourceType, int>& resources)
 {
-	m_playerResources = &resources;
+	m_resources = resources;
 }
 
 void InfoUi::Draw() const
@@ -18,14 +18,17 @@ void InfoUi::Draw() const
 
 	m_topUi.draw(Vec2( win_x / 2 - 500, 0 ));
 
-	// 資源の所持数をUIパネル内に表示
-	if (m_playerResources)
+	//画面左上に資源の所持数を表示
+	const Vec2 basePos{ win_x / 2 - 490, 10 };
+	double yOffset = 0;
+
+	for (const auto& pair : m_resources)
 	{
-		int i = 0;
-		for (const auto& pair : *m_playerResources)
-		{
-			m_font(U"{} : {}"_fmt(ToString(pair.first), pair.second)).draw(Vec2(win_x / 2 - 490, 10 + (i * 25)));
-			i++;
-		}
+		const auto& resourceType = pair.first;
+		const int amount = pair.second;
+
+		//資源名と数量を描画
+		m_font(U"{} : {}"_fmt(ToString(resourceType), amount)).draw(basePos.x, basePos.y + yOffset);
+		yOffset += 25; //次の資源の表示位置を下にずらす
 	}
 }

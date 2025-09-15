@@ -19,6 +19,11 @@ Game::Game()
 	architectUi.setBuildHandler([this](int type) {
 		this->startBuilding(type);
 	});
+	//ArchitectUiに資源獲得ハンドラを設定
+	architectUi.setResourceHandler([this](int type) {
+		this->startResourceGathering(type);
+	});
+
 	//updateCamera();
 }
 
@@ -96,30 +101,6 @@ bool Game::Update()
 			//選択されたタイルの種類に応じてUIを表示
 			const int tileType = tileTypes[m_selectedTileIndex.col][m_selectedTileIndex.row];
 			architectUi.show(tileType);
-
-
-			// Rキーが押されたら資源獲得タスクを開始する
-			if (s3d::KeyR.down())
-			{
-				const int tileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
-				const auto& resources = Resource::getResources(tileType);
-
-				if (!resources.empty())
-				{
-					ResourceJob newJob;
-					newJob.resources = resources;
-
-					// 例: 獲得資源量に基づいて必要な時間を設定
-					newJob.requiredTime = resources[0].amount / 5.0; // 例: 資源5個につき1秒
-
-					m_activeJobs.push_back(newJob);
-					Print << U"資源獲得を開始しました...";
-				}
-				else
-				{
-					Print << U"このタイルからは資源を得られません";
-				}
-			}
 
 			// 進行中の資源獲得タスクを更新
 			for (auto& job : m_activeJobs)
@@ -227,7 +208,7 @@ void Game::Draw() const
 		const ScopedRenderTarget3D target{ m_renderTexture.clear(bg) };
 		Graphics3D::SetPSTexture(0, m_tex);
 		tile.Draw();
-		drawSelection(); // 選択中のタイルをハイライト表示
+		drawSelection();		//選択中のタイルをハイライト表示
 
 		Graphics3D::Flush();
 		m_renderTexture.resolve();
@@ -282,6 +263,12 @@ void Game::startBuilding(int buildingType)
 		return;
 	}
 
+	// 建築に必要な資源をチェック、消費
+	if (!checkAndConsumeResources(buildingType))
+	{
+		return; //資源が足りなければ処理を中断
+	}
+
 	// 建築タスクを作成
 	BuildJob newJob;
 	newJob.index = m_selectedTileIndex;
@@ -290,4 +277,55 @@ void Game::startBuilding(int buildingType)
 	m_activeBuildJobs.push_back(newJob);
 
 	Print << U"建築予約: ({}, {}) - 5秒後"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
+}
+
+void Game::startResourceGathering(int tileType)
+{
+	// 現在選択されているタイルの種類を取得
+	const int currentTileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
+
+	// UIが提供したタイルタイプが、実際に選択されているタイルタイプと一致するか確認
+	if (tileType != currentTileType)
+	{
+		return; // 不一致の場合は何もしない
+	}
+
+	const auto& resources = Resource::getResources(tileType);
+
+	if (!resources.empty())
+	{
+		ResourceJob newJob;
+		newJob.resources = resources;
+		newJob.requiredTime = resources[0].amount / 5.0;
+		m_activeJobs.push_back(newJob);
+		Print << U"資源獲得を開始しました...";
+	}
+	else
+	{
+		Print << U"このタイルからは資源を得られません";
+	}
+}
+
+bool Game::checkAndConsumeResources(int buildingType)
+{
+	//建築コストを取得
+	const auto& costs = s_buildCosts.at(buildingType);
+
+	//資源が足りているか確認
+	for (const auto& cost : costs)
+	{
+		if (m_playerResources[cost.type] < cost.amount)
+		{
+			Print << U"資源「{}」が足りません。"_fmt(ToString(cost.type));
+			return false; //資源が不足
+		}
+	}
+
+	//資源を消費
+	for (const auto& cost : costs)
+	{
+		m_playerResources[cost.type] -= cost.amount;
+	}
+
+	return true; //資源を消費できた
 }

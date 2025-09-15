@@ -10,6 +10,7 @@
 #include "../Ui/ArchitectUi.hpp"
 #include "../Resource/Resource.hpp"
 #include "../Resource/ResourceJob.hpp"
+#include "../Resource/Build.hpp"
 
 
 class Tile;
@@ -48,11 +49,14 @@ private:
 	std::map<ResourceType, int> m_playerResources;
 	//進行中の建築タスクのリスト
 	std::vector<BuildJob> m_activeBuildJobs;
+	//建築に必要な資源があるか確認、消費する関数
+	bool checkAndConsumeResources(int buildingType);
 
 	void initLighting() const;
 	//void updateCamera();
 	void drawSelection() const;
 	void startBuilding(int buildingType);
+	void startResourceGathering(int tileType);
 
 	Tile tile;
 	InfoUi infoUi;
@@ -61,4 +65,23 @@ private:
 
 	//
 	s3d::Font font;
+};
+
+// 建物ごとの建築コストを定義する
+const std::map<int, std::vector<BuildCost>> s_buildCosts =
+{
+	//家を建てるコスト:木10個
+	{ 10, { { ResourceType::Wood, 10 } } },
+	//農場を建てるコスト:木5個、石3個
+	{ 6, { { ResourceType::Wood, 2 }, { ResourceType::Stone, 1 } } },
+	//牧場を建てるコスト:木8個
+	{ 5, { { ResourceType::Wood, 3 } } },
+	//鉱山を建てるコスト:石8個
+	{ 4, { { ResourceType::Stone, 5 } } },
+	//精錬所を建てるコスト:石15個、石レンガ5個
+	{ 8, { { ResourceType::Stone, 8 }, { ResourceType::Wood, 2 } } },
+	//加工場を建てるコスト:木20個、石10個
+	{ 12, { { ResourceType::Wood, 5 } } },
+	//交易所を建てるコスト:木材10個、石レンガ10個、布10個
+	{ 7, { { ResourceType::Wood, 5 }, { ResourceType::Stone, 5 } } }
 };

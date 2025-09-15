@@ -341,6 +341,7 @@
     <ClInclude Include="App\src\Core\SceneTitle.hpp" />
     <ClInclude Include="App\src\Player\CameraController.hpp" />
     <ClInclude Include="App\src\Player\PlayerInput.hpp" />
+    <ClInclude Include="App\src\Resource\Build.hpp" />
     <ClInclude Include="App\src\Resource\Resource.hpp" />
     <ClInclude Include="App\src\Resource\ResourceJob.hpp" />
     <ClInclude Include="App\src\Ui\ArchitectUi.hpp" />

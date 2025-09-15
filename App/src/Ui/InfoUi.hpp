@@ -18,6 +18,6 @@ private:
 	Texture m_topUi;
 
 	s3d::Font m_font;
-	//プレイヤーの資源所持数を参照するメンバ変数
-	const std::map<ResourceType, int>* m_playerResources = nullptr;
+	//プレイヤーの資源所持数を直接保持
+	std::map<ResourceType, int> m_resources;
 };

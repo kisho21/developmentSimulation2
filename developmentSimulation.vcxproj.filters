@@ -881,5 +881,8 @@
     <ClInclude Include="App\src\World\BuildJob.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
+    <ClInclude Include="App\src\Resource\Build.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

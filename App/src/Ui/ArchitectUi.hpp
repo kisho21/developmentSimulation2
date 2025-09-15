@@ -14,7 +14,10 @@ public:
 	void show(int tileType);
 	void hide();
 
+	//建築ハンドラ
 	void setBuildHandler(std::function<void(int)> handler) { m_buildHandler = handler; }
+	//資源獲得ハンドラ
+	void setResourceHandler(std::function<void(int)> handler) { m_resourceHandler = handler; }
 
 private:
 	Texture m_botUi;
@@ -22,4 +25,5 @@ private:
 	int m_currentTileType = -1;
 	s3d::Font m_font;
 	std::function<void(int)> m_buildHandler;
+	std::function<void(int)> m_resourceHandler;
 };

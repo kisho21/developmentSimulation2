@@ -105,6 +105,7 @@ const Model& Tile::getModel(int tileType) const
 	case 9: return m_bridgeModel;
 	case 10: return m_house1Model;
 	case 11: return m_house2Model;
+	case 12: return m_processingModel;
 	}
 	// エラーを避けるためのフォールバック
 	return m_grassModel;

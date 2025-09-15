@@ -32,50 +32,91 @@ void ArchitectUi::Draw() const
 	// タイルの種類に応じてボタンを表示
 	switch (m_currentTileType)
 	{
-	case 0: // 森
-		m_font(U"伐採所を建てる").drawAt(Scene::Center().movedBy(0, -50));
-		if (SimpleGUI::Button(U"建設", Scene::Center().movedBy(0, 0)))
+	case 0: //森
+		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
+		if (SimpleGUI::Button(U"木を獲得", Vec2(win_x - 220, win_y - 120)))
 		{
-			// 伐採所建築ロジック
+			if (m_resourceHandler)
+			{
+				m_resourceHandler(m_currentTileType);
+			}
 		}
 		break;
 	case 1: // 岩山
-		m_font(U"鉱山を建てる").drawAt(Scene::Center().movedBy(0, -50));
-		if (SimpleGUI::Button(U"建設", Scene::Center().movedBy(0, 0)))
+		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
+		if (SimpleGUI::Button(U"石を獲得", Vec2(win_x - 220, win_y - 120)))
 		{
-			// 鉱山建築ロジック
+			if (m_resourceHandler)
+			{
+				m_resourceHandler(m_currentTileType);
+			}
 		}
 		break;
-	case 2: // 草原
-		m_font(U"家を建てる").drawAt(Vec2(win_x - 160, win_y - 200), Palette::Black);
-		if (SimpleGUI::Button(U"建設", Vec2(win_x - 200, win_y - 100)))
+	case 2: //草原
+		m_font(U"建築する").drawAt(Vec2(win_x - 160, win_y - 200), Palette::Black);
+		//家を建てるボタンを追加
+		if (SimpleGUI::Button(U"住居", Vec2(win_x - 300, win_y - 160)))
 		{
 			if (m_buildHandler)
 			{
-				// 家のタイルタイプIDを渡す
-				m_buildHandler(10); // 例: 家のIDを10とする
+				//家のタイルタイプIDを渡す
+				m_buildHandler(10);
 			}
 		}
 
-		// 農場を建てるボタンを追加
-		m_font(U"農場を建てる").drawAt(Vec2(win_x - 160, win_y - 170), Palette::Black);
-		if (SimpleGUI::Button(U"建設", Vec2(win_x - 200, win_y - 70)))
+		//農場を建てるボタンを追加
+		if (SimpleGUI::Button(U"農場", Vec2(win_x - 300, win_y - 110)))
 		{
 			if (m_buildHandler)
 			{
-				// 農場のタイルタイプIDを渡す
-				m_buildHandler(6); // 例: 農場のIDを6とする
+				//農場のタイルタイプIDを渡す
+				m_buildHandler(6);
 			}
 		}
 
-		// 牧場を建てるボタンを追加
-		m_font(U"牧場を建てる").drawAt(Vec2(win_x - 160, win_y - 140), Palette::Black);
-		if (SimpleGUI::Button(U"建設", Vec2(win_x - 200, win_y - 40)))
+		//牧場を建てるボタンを追加
+		if (SimpleGUI::Button(U"牧場", Vec2(win_x - 300, win_y - 60)))
 		{
 			if (m_buildHandler)
 			{
-				// 牧場のタイルタイプIDを渡す
-				m_buildHandler(5); // 例: 牧場のIDを5とする
+				//牧場のタイルタイプIDを渡す
+				m_buildHandler(5);
+			}
+		}
+
+		//鉱山を建てるボタンを追加
+		if (SimpleGUI::Button(U"鉱山", Vec2(win_x - 210, win_y - 160)))
+		{
+			if (m_buildHandler)
+			{
+				m_buildHandler(4);
+			}
+		}
+
+		//精錬所を建てるボタンを追加
+		if (SimpleGUI::Button(U"精錬所", Vec2(win_x - 210, win_y - 110)))
+		{
+			if (m_buildHandler)
+			{
+				m_buildHandler(8);
+			}
+		}
+
+		//加工場を建てるボタンを追加
+		if (SimpleGUI::Button(U"加工場", Vec2(win_x - 210, win_y - 60)))
+		{
+			if (m_buildHandler)
+			{
+				m_buildHandler(12);
+			}
+		}
+
+		//交易所を建てるボタンを追加
+		if (SimpleGUI::Button(U"交易所", Vec2(win_x - 120, win_y - 160)))
+		{
+			if (m_buildHandler)
+			{
+				m_buildHandler(7);
 			}
 		}
 		break;
