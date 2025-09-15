@@ -1,6 +1,5 @@
 ﻿#include <random>
 #include "Tile.hpp"
-#include "Grid.hpp"
 
 Tile::Tile()
 	: m_rotate{ Quaternion::RotateY(60_deg) }
@@ -53,8 +52,13 @@ void Tile::Draw() const
 				//タイルの種類を取得
 				int tileType = m_tileTypes[col][row];
 
+				//モデルが置き換えられたかチェック
+				if (m_replacedModels.count({ row, col }))
+				{
+					m_replacedModels.at({ row, col }).draw(Vec3(x, 0, z));
+				}
 				//最初に住居を1つ、それ以外はランダム
-				if (row == 14 && col == 14)
+				else if (row == 14 && col == 14)
 				{
 					m_house1Model.draw(Vec3(x, 0, z));
 				}
@@ -67,13 +71,13 @@ void Tile::Draw() const
 					//ランダム生成したいタイル
 					switch (tileType) {
 					case 0:
-						m_grassModel.draw(Vec3(x, 0, z));
-						break;
-					case 1:
 						m_forestModel.draw(Vec3(x, 0, z));
 						break;
-					case 2:
+					case 1:
 						m_rockModel.draw(Vec3(x, 0, z));
+						break;
+					case 2:
+						m_grassModel.draw(Vec3(x, 0, z));
 						break;
 					case 3:
 						m_lakeModel.draw(Vec3(x, 0, z));
@@ -89,11 +93,29 @@ const Model& Tile::getModel(int tileType) const
 {
 	switch (tileType)
 	{
-	case 0: return m_grassModel;
-	case 1: return m_forestModel;
-	case 2: return m_rockModel;
+	case 0: return m_forestModel;
+	case 1: return m_rockModel;
+	case 2: return m_grassModel;
 	case 3: return m_lakeModel;
+	case 4: return m_mineModel;
+	case 5: return m_sheepModel;
+	case 6: return m_farmModel;
+	case 7: return m_tradeModel;
+	case 8: return m_smelterModel;
+	case 9: return m_bridgeModel;
+	case 10: return m_house1Model;
+	case 11: return m_house2Model;
 	}
 	// エラーを避けるためのフォールバック
 	return m_grassModel;
+}
+
+void Tile::setTileModel(const GridIndex& index, const Model& newModel)
+{
+	m_replacedModels[index] = newModel;
+}
+
+void Tile::updateTileType(const GridIndex& index, int newType)
+{
+	m_tileTypes[index.col][index.row] = newType;
 }

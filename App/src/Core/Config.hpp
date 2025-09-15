@@ -38,4 +38,14 @@ struct GridIndex
 {
 	int row;
 	int col;
+
+	// < 演算子を追加
+	bool operator<(const GridIndex& other) const
+	{
+		if (row != other.row)
+		{
+			return row < other.row;
+		}
+		return col < other.col;
+	}
 };

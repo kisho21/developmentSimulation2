@@ -1,4 +1,5 @@
-﻿#include "Game.hpp"
+﻿#include <Siv3D.hpp>
+#include "Game.hpp"
 
 Game::Game()
 	: m_renderTexture{ Scene::Size(),TextureFormat::R8G8B8A8_Unorm_SRGB,HasDepth::Yes }
@@ -14,6 +15,10 @@ Game::Game()
 	m_title.Init();
 	m_fader.startFadeIn();		//フェードイン処理開始
 
+	//ArchitectUiに建築ハンドラを設定
+	architectUi.setBuildHandler([this](int type) {
+		this->startBuilding(type);
+	});
 	//updateCamera();
 }
 
@@ -70,6 +75,8 @@ bool Game::Update()
 			m_cameraController.Update(Scene::DeltaTime());
 			Graphics3D::SetCameraTransform(m_cam);
 
+			infoUi.setResources(m_playerResources);
+
 			//WASDキーによるタイル選択
 			int newRow = m_selectedTileIndex.row;
 			int newCol = m_selectedTileIndex.col;
@@ -89,6 +96,79 @@ bool Game::Update()
 			//選択されたタイルの種類に応じてUIを表示
 			const int tileType = tileTypes[m_selectedTileIndex.col][m_selectedTileIndex.row];
 			architectUi.show(tileType);
+
+
+			// Rキーが押されたら資源獲得タスクを開始する
+			if (s3d::KeyR.down())
+			{
+				const int tileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
+				const auto& resources = Resource::getResources(tileType);
+
+				if (!resources.empty())
+				{
+					ResourceJob newJob;
+					newJob.resources = resources;
+
+					// 例: 獲得資源量に基づいて必要な時間を設定
+					newJob.requiredTime = resources[0].amount / 5.0; // 例: 資源5個につき1秒
+
+					m_activeJobs.push_back(newJob);
+					Print << U"資源獲得を開始しました...";
+				}
+				else
+				{
+					Print << U"このタイルからは資源を得られません";
+				}
+			}
+
+			// 進行中の資源獲得タスクを更新
+			for (auto& job : m_activeJobs)
+			{
+				job.elapsedTime += Scene::DeltaTime();
+			}
+
+			// 進行中の建築タスクを更新
+			for (auto& job : m_activeBuildJobs)
+			{
+				job.elapsedTime += Scene::DeltaTime();
+			}
+
+			// 完了したタスクを処理
+			std::erase_if(m_activeJobs, [this](const ResourceJob& job)
+			{
+					if (job.elapsedTime >= job.requiredTime)
+					{
+						// 資源をプレイヤーに加算
+						for (const auto& res : job.resources)
+						{
+							m_playerResources[res.type] += res.amount;
+						}
+						Print << U"資源の獲得が完了しました！";
+						return true; // 完了したタスクをリストから削除
+					}
+					return false; // 継続
+			});
+
+			std::erase_if(m_activeBuildJobs, [this](const BuildJob& job)
+			{
+				if (job.elapsedTime >= job.requiredTime)
+				{
+					//モデルを置き換える
+					tile.setTileModel(job.index, tile.getModel(job.tileType));
+					//タイルタイプを更新する
+					tile.updateTileType(job.index, job.tileType);
+					Print << U"建築完了: ({}, {})"_fmt(job.index.row, job.index.col);
+					return true;
+				}
+				return false;
+			});
+
+			// ... 既存のデバッグ表示 ...
+			for (const auto& pair : m_playerResources)
+			{
+				Print << U"{} : {}個"_fmt(ToString(pair.first), pair.second);
+			}
+
 		}
 		break;
 
@@ -186,4 +266,28 @@ void Game::Draw() const
 	}
 
 	m_fader.Draw();
+}
+
+void Game::startBuilding(int buildingType)
+{
+	Print << U"startBuilding が呼ばれました";
+	// 建築可能なタイルか確認
+	// 現在選択されているタイルの種類を取得
+	const int currentTileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
+
+	// 草原タイル（ID=2）でのみ建築可能と仮定
+	if (currentTileType != 2)
+	{
+		Print << U"このタイルには建築できません。";
+		return;
+	}
+
+	// 建築タスクを作成
+	BuildJob newJob;
+	newJob.index = m_selectedTileIndex;
+	newJob.tileType = buildingType; // どの建物を建てるかのIDをセット
+	newJob.requiredTime = 5.0; // 建築に必要な時間（例: 5秒）
+	m_activeBuildJobs.push_back(newJob);
+
+	Print << U"建築予約: ({}, {}) - 5秒後"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
 }

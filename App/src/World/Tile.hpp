@@ -1,6 +1,6 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
-#include "Grid.hpp"
+#include "../Core/Config.hpp"
 
 class Tile
 {
@@ -10,11 +10,19 @@ public:
 
 	const std::vector<std::vector<int>>& getTileTypes() const { return m_tileTypes; }
 	const Model& getModel(int tileType) const;
+	void setTileModel(const GridIndex& index, const Model& newModel);
+
+	//家モデルを取得する関数を追加
+	const Model& getHouseModel() const { return m_house1Model; }
+
+	//タイルタイプを更新する関数
+	void updateTileType(const GridIndex& index, int newType);
 
 private:
 	Quaternion m_rotate;
 
 	std::vector<std::vector<int>> m_tileTypes;	//タイルの種類を保持する2次元配列
+	std::map<GridIndex, Model> m_replacedModels;
 
 	Model m_grassModel;			//草原
 	Model m_forestModel;		//森

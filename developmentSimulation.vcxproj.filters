@@ -168,6 +168,12 @@
     <ClCompile Include="App\src\Core\Fader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="App\src\Resource\ResourceJob.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="App\src\Resource\Resource.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -864,6 +870,15 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Core\Fader.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Resource\ResourceJob.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Resource\Resource.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\World\BuildJob.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>
