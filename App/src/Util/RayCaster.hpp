@@ -1,12 +1,24 @@
-﻿#pragma once
-#include <Siv3D.hpp>
-
-class RayCaster
-{
-public:
-	//画面上の2D座標から3D空間のレイを生成
-	static Ray CreateRay(const BasicCamera3D& camera, const Vec2& screenPos);
-
-	//レイが指定された平面と交差する点を計算
-	static Optional<Float3> IntersectsPlane(const Ray& ray, const Plane& plane);
-};
+﻿//#pragma once
+//#include <Siv3D.hpp>
+//#include "../World/Tile.hpp"
+//
+//// クリックされたタイルのグリッド座標
+//struct GridIndex
+//{
+//	int row;
+//	int col;
+//};
+//
+//class RayCaster
+//{
+//public:
+//	//コンストラクタにカメラの参照を渡す
+//	RayCaster(const BasicCamera3D& cam);
+//
+//	//マウスカーソルからレイを飛ばし、交差したタイルのグリッド座標を返す
+//	//交差しない場合は空のstd::optionalを返す
+//	std::optional<GridIndex> Raycast(const Tile& tile) const;
+//
+//private:
+//	//const BasicCamera3D& m_cam;
+//};

@@ -1,4 +1,22 @@
-﻿#include "CameraController.h"
+﻿#include "CameraController.hpp"
+
+//CameraController::CameraController(s3d::DebugCamera3D& cam)
+//	: m_cam(cam)
+//{
+//}
+//
+//void CameraController::setView(const s3d::Vec3& eyePosition, const s3d::Vec3& lookAt)
+//{
+//	m_cam.setView(eyePosition, lookAt, s3d::Vec3::UnitY());
+//}
+
+
+
+
+
+
+
+
 
 CameraController::CameraController(BasicCamera3D& cam)
 	: m_cam{ cam }
@@ -7,6 +25,7 @@ CameraController::CameraController(BasicCamera3D& cam)
 	, m_pitch{ 0.0 }
 {
 	const Vec3 viewDir = (Vec3{ 0, 0, 0 } - m_eye).normalized();
+
 	m_yaw = Atan2(viewDir.z, viewDir.x);
 	m_pitch = Asin(viewDir.y);
 }
@@ -56,6 +75,7 @@ void CameraController::Update(double deltaTime)
 	{
 		m_eye += forward * -wheelScrollDelta * Config::CamZoomSpeed;
 	}
-
+	
 	m_cam.setView(m_eye, m_eye + forward, up);
+	if (m_eye.y < 10) { m_eye.y = 10; }
 }

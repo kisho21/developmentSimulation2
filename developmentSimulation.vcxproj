@@ -117,8 +117,6 @@
   <ItemGroup>
     <ClCompile Include="App\src\Core\Fader.cpp" />
     <ClCompile Include="App\src\Core\Game.cpp" />
-    <ClCompile Include="App\src\Core\SceneGame.cpp" />
-    <ClCompile Include="App\src\Core\SceneChangeManager.cpp" />
     <ClCompile Include="App\src\Core\SceneTitle.cpp" />
     <ClCompile Include="App\src\Player\CameraController.cpp" />
     <ClCompile Include="App\src\Ui\ArchitectUi.cpp" />
@@ -338,10 +336,8 @@
     <ClInclude Include="App\src\Core\Config.hpp" />
     <ClInclude Include="App\src\Core\Fader.hpp" />
     <ClInclude Include="App\src\Core\Game.hpp" />
-    <ClInclude Include="App\src\Core\SceneGame.hpp" />
-    <ClInclude Include="App\src\Core\SceneChangeManager.hpp" />
     <ClInclude Include="App\src\Core\SceneTitle.hpp" />
-    <ClInclude Include="App\src\Player\CameraController.h" />
+    <ClInclude Include="App\src\Player\CameraController.hpp" />
     <ClInclude Include="App\src\Player\PlayerInput.hpp" />
     <ClInclude Include="App\src\Ui\ArchitectUi.hpp" />
     <ClInclude Include="App\src\Ui\InfoUi.hpp" />

@@ -1,5 +1,4 @@
 ﻿#include "Game.hpp"
-#include "../Util/RayCaster.hpp"
 
 Game::Game()
 	: m_renderTexture{ Scene::Size(),TextureFormat::R8G8B8A8_Unorm_SRGB,HasDepth::Yes }
@@ -7,13 +6,15 @@ Game::Game()
 	, m_cameraController{ m_cam }
 	, m_ps{ HLSL{ U"example/shader/hlsl/forward_triplanar.hlsl",U"PS"} }
 	, m_tex{ U"example/texture/uv.png" }
-	//
+	, m_selectedTileIndex{ 14,14 }
 	, font{ 20 }
 {
 	if (!m_ps) throw Error{ U"Failed to load PixelShader" };		//パスが間違っているとき任意でエラーを出すようにできる
 	initLighting();
 	m_title.Init();
 	m_fader.startFadeIn();		//フェードイン処理開始
+
+	//updateCamera();
 }
 
 void Game::initLighting() const
@@ -21,6 +22,30 @@ void Game::initLighting() const
 	Graphics3D::SetGlobalAmbientColor(ColorF(0.1));
 	Graphics3D::SetSunColor(ColorF(1.0));							//平行光
 	Graphics3D::SetSunDirection(Vec3(0.3, 1, 0.2).normalized());	//normalized()→スクリーン座標を標準化するため
+}
+
+/*
+void Game::updateCamera()
+{
+	// 選択中のタイルの3D座標を計算
+	const double x_gap = (m_selectedTileIndex.col % 2 == 1) ? 0.5 : 0;
+	const Vec3 targetPos = Vec3{ m_selectedTileIndex.row + x_gap, 0, 0.866 * m_selectedTileIndex.col };
+
+	// カメラの目標位置を設定
+	const Vec3 cameraOffset = Vec3{ 10, 15, -10 }; // 斜め上からの俯瞰
+	const Vec3 newEyePos = targetPos - cameraOffset;
+
+	// CameraControllerのsetViewを呼び出す
+	m_cameraController.setView(newEyePos, targetPos);
+}*/
+
+void Game::drawSelection() const
+{
+	const double x_gap = (m_selectedTileIndex.col % 2 == 1) ? 0.5 : 0;
+	const Vec3 highlightPos = Vec3{ m_selectedTileIndex.row + x_gap, 0, 0.866 * m_selectedTileIndex.col };
+
+	// 選択中のタイルに黄色の枠を描画
+	Box{ highlightPos, 1.0, 0.5, 1.0 }.drawFrame(Palette::Yellow);
 }
 
 bool Game::Update()
@@ -41,13 +66,29 @@ bool Game::Update()
 		}
 		else if (m_currentScene == SceneState::Game)
 		{
+
 			m_cameraController.Update(Scene::DeltaTime());
 			Graphics3D::SetCameraTransform(m_cam);
-			/*if (s3d::Keyboard::Escape.down())
+
+			//WASDキーによるタイル選択
+			int newRow = m_selectedTileIndex.row;
+			int newCol = m_selectedTileIndex.col;
+
+			if (s3d::KeyW.down()) { newCol++; }
+			if (s3d::KeyS.down()) { newCol--; }
+			if (s3d::KeyA.down()) { newRow--; }
+			if (s3d::KeyD.down()) { newRow++; }
+
+			//新しい座標が有効範囲内か確認
+			const auto& tileTypes = tile.getTileTypes();
+			if (newCol >= 0 && newCol < tileTypes.size() && newRow >= 0 && newRow < tileTypes[0].size())
 			{
-				m_managerState = ManagerState::FadeOut;
-				m_fader.startFadeOut();
-			}*/
+				m_selectedTileIndex = { newRow, newCol };
+			}
+
+			//選択されたタイルの種類に応じてUIを表示
+			const int tileType = tileTypes[m_selectedTileIndex.col][m_selectedTileIndex.row];
+			architectUi.show(tileType);
 		}
 		break;
 
@@ -63,6 +104,7 @@ bool Game::Update()
 		if (m_currentScene == SceneState::Title)
 		{
 			m_currentScene = SceneState::Game;
+			//updateCamera();
 		}
 		else
 		{
@@ -81,55 +123,14 @@ bool Game::Update()
 		break;
 	}
 
-	
-
-	if (MouseL.down())
+	// WASDキーによるタイル選択が行われたかどうかにかかわらず、毎フレームカメラを更新する
+	if (m_currentScene == SceneState::Game)
 	{
-		//RayCaster::CreateRay() を使用せず、直接Rayを生成
-		const Ray ray = m_cam.screenToRay(s3d::Cursor::PosF());
-
-		const Plane groundPlane{ 0.0f, 1.0f, 0.0f, 0.0f };
-
-		//IntersectsPlane() に直接 ray と plane を渡す
-		if (const auto hitPos = RayCaster::IntersectsPlane(ray, groundPlane))
-		{
-			//3D座標からグリッド座標に変換
-			if (const auto selectedGrid = tile.getGridPosFromWorldPos(hitPos.value()))
-			{
-				//タイルがクリックされた
-				const int selectedRow = selectedGrid->row;
-				const int selectedCol = selectedGrid->col;
-
-				ClearPrint();
-				Print << U"Hit Position: " << hitPos.value();
-			}
-		}
+		//updateCamera();
 	}
 
-
-	////マウス左ボタンが押された瞬間を検出
-	//if (s3d::MouseL.down())
-	//{
-	//	// 1. カメラオブジェクトを明示的にキャスト
-	//	// 2. カーソル位置を s3d::::Cursor::PosF() で明示
-	//	const s3d::Ray ray = RayCaster::CreateRay(static_cast<const s3d::BasicCamera3D&>(m_cam), s3d::Cursor::PosF());
-
-	//	const s3d::Plane groundPlane{ 0.0f, 1.0f, 0.0f, 0.0f };
-
-	//	if (const auto hitPos = RayCaster::IntersectsPlane(ray, groundPlane))
-	//	{
-	//		//3D座標からグリッド座標に変換
-	//		if (const auto selectedGrid = tile.getGridPosFromWorldPos(hitPos.value()))
-	//		{
-	//			//タイルがクリックされた
-	//			const int selectedRow = selectedGrid->row;
-	//			const int selectedCol = selectedGrid->col;
-
-	//			ClearPrint();
-	//			Print << U"Hit Position: " << hitPos.value();
-	//		}
-	//	}
-	//}
+	// === デバッグ表示 ===
+	Print << U"Selected Tile: ({}, {})"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
 
 	return true;
 }
@@ -146,46 +147,15 @@ void Game::Draw() const
 		const ScopedRenderTarget3D target{ m_renderTexture.clear(bg) };
 		Graphics3D::SetPSTexture(0, m_tex);
 		tile.Draw();
+		drawSelection(); // 選択中のタイルをハイライト表示
 
 		Graphics3D::Flush();
 		m_renderTexture.resolve();
 		Shader::LinearToScreen(m_renderTexture);
 
 		infoUi.Draw();
+		architectUi.Draw();
 	}
-
-
-	//const ColorF bg{ 0.2, 0.5, 0.8 };
-
-	//// 現在のシーンを描画
-	//if (m_currentScene == SceneState::Title)
-	//{
-	//	m_title.Draw();
-	//}
-	//else if (m_currentScene == SceneState::Game)
-	//{
-	//	//3D描画処理
-	//	{
-	//		const ScopedRenderTarget3D target{ m_renderTexture.clear(bg) };
-	//		Graphics3D::SetPSTexture(0, m_tex);
-	//		 
-	//		tile.Draw();
-	//	}
-
-	//	//2D転送
-	//	{
-	//		Graphics3D::Flush();						//スクリーンに映すまでの流れ、定型文
-	//		m_renderTexture.resolve();					//スクリーンに映すまでの流れ、定型文
-	//		Shader::LinearToScreen(m_renderTexture);	//スクリーンフリップ
-	//	}
-
-	//	//2D描画処理
-	//	{
-	//		infoUi.Draw();
-	//		//architectUi.Draw(); 
-	//	}
-	//}
-
 	
 	// === デバッグ表示 ===
 	// 現在のシーン状態を画面左上に表示する

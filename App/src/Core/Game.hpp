@@ -3,10 +3,11 @@
 #include "Config.hpp"
 #include "Fader.hpp"
 #include "SceneTitle.hpp"
-#include "../Player/CameraController.h"
+#include "../Player/CameraController.hpp"
 #include "../World/Tile.hpp"
 #include "../Ui/InfoUi.hpp"
 #include "../Ui/ArchitectUi.hpp"
+
 
 class Tile;
 class InfoUi;
@@ -23,7 +24,7 @@ private:
 	//シーン切り替え関連
 	Fader m_fader;
 	SceneTitle m_title;
-	SceneState m_currentScene = SceneState::Title;
+	SceneState m_currentScene = SceneState::Game;
 	ManagerState m_managerState = ManagerState::FadeIn;
 
 	MSRenderTexture m_renderTexture;
@@ -33,11 +34,16 @@ private:
 	PixelShader m_ps;
 	Texture m_tex;
 
+	//選択中のタイルの座標
+	GridIndex m_selectedTileIndex;
+
 	void initLighting() const;
+	//void updateCamera();
+	void drawSelection() const;
 
 	Tile tile;
 	InfoUi infoUi;
-	//ArchitectUi architectUi;
+	ArchitectUi architectUi;
 
 
 	//

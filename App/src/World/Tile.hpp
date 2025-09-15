@@ -8,7 +8,8 @@ public:
 	Tile();
 	void Draw() const;
 
-	Optional<TileGrid> getGridPosFromWorldPos(const Vec3& worldPos) const;
+	const std::vector<std::vector<int>>& getTileTypes() const { return m_tileTypes; }
+	const Model& getModel(int tileType) const;
 
 private:
 	Quaternion m_rotate;

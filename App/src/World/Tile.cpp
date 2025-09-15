@@ -85,22 +85,15 @@ void Tile::Draw() const
 	}
 }
 
-Optional<TileGrid> Tile::getGridPosFromWorldPos(const Vec3& worldPos) const
+const Model& Tile::getModel(int tileType) const
 {
-	//タイルの描画時に使用した座標変換の逆を計算します
-	//worldPos.zからおおよその列（col）を計算
-	const int col = static_cast<int>(std::round(worldPos.z / 0.866));
-
-	//偶数/奇数行のオフセットを考慮してx座標を調整
-	const double x_gap = (col % 2 == 1) ? 0.5 : 0.0;
-	const int row = static_cast<int>(std::round(worldPos.x - x_gap));
-
-	//計算したグリッド座標がマップの範囲内にあるかチェック
-	if (col >= 0 && col < m_tileTypes.size() &&
-		row >= 0 && row < m_tileTypes[0].size())
+	switch (tileType)
 	{
-		return TileGrid{ row, col };
+	case 0: return m_grassModel;
+	case 1: return m_forestModel;
+	case 2: return m_rockModel;
+	case 3: return m_lakeModel;
 	}
-
-	return none; //範囲外の場合はnoneを返す
+	// エラーを避けるためのフォールバック
+	return m_grassModel;
 }

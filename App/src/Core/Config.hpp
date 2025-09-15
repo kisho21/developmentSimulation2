@@ -32,3 +32,10 @@ enum class FadeState
 	FadeOut,
 	FadeIn,
 };
+
+//クリックされたタイルのグリッド座標
+struct GridIndex
+{
+	int row;
+	int col;
+};
