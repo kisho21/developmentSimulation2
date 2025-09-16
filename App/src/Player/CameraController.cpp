@@ -1,23 +1,5 @@
 ﻿#include "CameraController.hpp"
 
-//CameraController::CameraController(s3d::DebugCamera3D& cam)
-//	: m_cam(cam)
-//{
-//}
-//
-//void CameraController::setView(const s3d::Vec3& eyePosition, const s3d::Vec3& lookAt)
-//{
-//	m_cam.setView(eyePosition, lookAt, s3d::Vec3::UnitY());
-//}
-
-
-
-
-
-
-
-
-
 CameraController::CameraController(BasicCamera3D& cam)
 	: m_cam{ cam }
 	, m_eye{ cam.getEyePosition() }

@@ -24,13 +24,13 @@ void SceneTitle::Update()
 
 void SceneTitle::Draw() const
 {
-	m_titleFont(U"タイトル画面").drawAt(s3d::Scene::Center());
+	m_titleFont(U"Develop Nature").drawAt(s3d::Scene::Center());
 	m_messageFont(U"スペースキーでゲームへ").drawAt(s3d::Scene::Center().movedBy(0, 50));
 
 
 	// デバッグ表示
-	if (m_requestChange)
+	/*if (m_requestChange)
 	{
 		m_messageFont(U"スペースキーが押されました！").draw(50, 50);
-	}
+	}*/
 }

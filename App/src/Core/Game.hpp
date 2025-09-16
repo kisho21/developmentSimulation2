@@ -28,7 +28,7 @@ private:
 	//シーン切り替え関連
 	Fader m_fader;
 	SceneTitle m_title;
-	SceneState m_currentScene = SceneState::Game;
+	SceneState m_currentScene = SceneState::Title;
 	ManagerState m_managerState = ManagerState::FadeIn;
 
 	MSRenderTexture m_renderTexture;
@@ -68,20 +68,43 @@ private:
 };
 
 // 建物ごとの建築コストを定義する
+//const std::map<int, std::vector<BuildCost>> s_buildCosts =
+//{
+//	//家を建てるコスト:木10個
+//	{ 10, { { ResourceType::Wood, 10 } } },
+//	//家をアップグレードするコスト:木材10個、石レンガ10個、インゴット5個
+//	{ 11, { { ResourceType::Timber, 10 },{ ResourceType::Breck, 10 },{ ResourceType::Ingot, 5 } } },
+//	//農場を建てるコスト:木5個、石3個
+//	{ 6, { { ResourceType::Wood, 5 }, { ResourceType::Stone, 3 } } },
+//	//牧場を建てるコスト:木8個
+//	{ 5, { { ResourceType::Wood, 8 } } },
+//	//鉱山を建てるコスト:石8個
+//	{ 4, { { ResourceType::Stone, 8 } } },
+//	//精錬所を建てるコスト:石15個、石レンガ5個
+//	{ 8, { { ResourceType::Stone, 15 }, { ResourceType::Breck, 5 } } },
+//	//加工場を建てるコスト:木20個、石10個
+//	{ 12, { { ResourceType::Wood, 20 },{ ResourceType::Stone, 10 } } },
+//	//交易所を建てるコスト:木材10個、石レンガ10個、布10個
+//	{ 7, { { ResourceType::Timber, 10 }, { ResourceType::Breck, 10 },{ ResourceType::Cloth, 10 } } }
+//};
+
+//デバッグ　すべて木1つ
 const std::map<int, std::vector<BuildCost>> s_buildCosts =
 {
 	//家を建てるコスト:木10個
-	{ 10, { { ResourceType::Wood, 10 } } },
+	{ 10, { { ResourceType::Wood, 1 } } },
+	//家をアップグレードするコスト:木材10個、石レンガ10個、インゴット5個
+	{ 11, { { ResourceType::Timber, 1 } } },
 	//農場を建てるコスト:木5個、石3個
-	{ 6, { { ResourceType::Wood, 2 }, { ResourceType::Stone, 1 } } },
+	{ 6, { { ResourceType::Wood, 1 } } },
 	//牧場を建てるコスト:木8個
-	{ 5, { { ResourceType::Wood, 3 } } },
+	{ 5, { { ResourceType::Wood, 1 } } },
 	//鉱山を建てるコスト:石8個
-	{ 4, { { ResourceType::Stone, 5 } } },
+	{ 4, { { ResourceType::Wood, 1 } } },
 	//精錬所を建てるコスト:石15個、石レンガ5個
-	{ 8, { { ResourceType::Stone, 8 }, { ResourceType::Wood, 2 } } },
+	{ 8, { { ResourceType::Wood, 1 } } },
 	//加工場を建てるコスト:木20個、石10個
-	{ 12, { { ResourceType::Wood, 5 } } },
+	{ 12, { { ResourceType::Wood, 1 } } },
 	//交易所を建てるコスト:木材10個、石レンガ10個、布10個
-	{ 7, { { ResourceType::Wood, 5 }, { ResourceType::Stone, 5 } } }
+	{ 7, { { ResourceType::Wood, 1 } } }
 };

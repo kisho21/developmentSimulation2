@@ -16,7 +16,7 @@ void InfoUi::Draw() const
 	int win_x = 1280;
 	int win_y = 720;
 
-	m_topUi.draw(Vec2( win_x / 2 - 500, 0 ));
+	//m_topUi.draw(Vec2( win_x / 2 - 500, 0 ));
 
 	//画面左上に資源の所持数を表示
 	const Vec2 basePos{ win_x / 2 - 490, 10 };

@@ -57,15 +57,6 @@ void Tile::Draw() const
 				{
 					m_replacedModels.at({ row, col }).draw(Vec3(x, 0, z));
 				}
-				//最初に住居を1つ、それ以外はランダム
-				else if (row == 14 && col == 14)
-				{
-					m_house1Model.draw(Vec3(x, 0, z));
-				}
-				else if (row >= 14 && row <= 15 && col >= 14 && col <= 15)
-				{
-					m_grassModel.draw(Vec3(x, 0, z));
-				}
 				else
 				{
 					//ランダム生成したいタイル
@@ -84,6 +75,34 @@ void Tile::Draw() const
 						break;
 					}
 				}
+
+				//最初に住居を1つ、それ以外はランダム
+				//else if (row == 14 && col == 14)
+				//{
+				//	m_house1Model.draw(Vec3(x, 0, z));
+				//}
+				//else if (row >= 14 && row <= 15 && col >= 14 && col <= 15)
+				//{
+				//	m_grassModel.draw(Vec3(x, 0, z));
+				//}
+				//else
+				//{
+				//	//ランダム生成したいタイル
+				//	switch (tileType) {
+				//	case 0:
+				//		m_forestModel.draw(Vec3(x, 0, z));
+				//		break;
+				//	case 1:
+				//		m_rockModel.draw(Vec3(x, 0, z));
+				//		break;
+				//	case 2:
+				//		m_grassModel.draw(Vec3(x, 0, z));
+				//		break;
+				//	case 3:
+				//		m_lakeModel.draw(Vec3(x, 0, z));
+				//		break;
+				//	}
+				//}
 			}
 		}
 	}
@@ -107,7 +126,7 @@ const Model& Tile::getModel(int tileType) const
 	case 11: return m_house2Model;
 	case 12: return m_processingModel;
 	}
-	// エラーを避けるためのフォールバック
+	//エラーを避けるためのフォールバック
 	return m_grassModel;
 }
 

@@ -168,9 +168,6 @@
     <ClCompile Include="App\src\Core\Fader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App\src\Resource\ResourceJob.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="App\src\Resource\Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -861,9 +858,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Util\RayCaster.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="App\src\World\Grid.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Core\SceneTitle.hpp">

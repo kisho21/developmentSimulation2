@@ -23,8 +23,6 @@ Game::Game()
 	architectUi.setResourceHandler([this](int type) {
 		this->startResourceGathering(type);
 	});
-
-	//updateCamera();
 }
 
 void Game::initLighting() const
@@ -124,7 +122,7 @@ bool Game::Update()
 						{
 							m_playerResources[res.type] += res.amount;
 						}
-						Print << U"資源の獲得が完了しました！";
+						//Print << U"資源の獲得が完了しました！";
 						return true; // 完了したタスクをリストから削除
 					}
 					return false; // 継続
@@ -138,7 +136,7 @@ bool Game::Update()
 					tile.setTileModel(job.index, tile.getModel(job.tileType));
 					//タイルタイプを更新する
 					tile.updateTileType(job.index, job.tileType);
-					Print << U"建築完了: ({}, {})"_fmt(job.index.row, job.index.col);
+					//Print << U"建築完了: ({}, {})"_fmt(job.index.row, job.index.col);
 					return true;
 				}
 				return false;
@@ -191,7 +189,7 @@ bool Game::Update()
 	}
 
 	// === デバッグ表示 ===
-	Print << U"Selected Tile: ({}, {})"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
+	//Print << U"Selected Tile: ({}, {})"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
 
 	return true;
 }
@@ -218,48 +216,48 @@ void Game::Draw() const
 		architectUi.Draw();
 	}
 	
-	// === デバッグ表示 ===
-	// 現在のシーン状態を画面左上に表示する
-	if (m_currentScene == SceneState::Title)
-	{
-		font(U"SceneState: Title").draw(10, 10);
-	}
-	else
-	{
-		font(U"SceneState: Game").draw(10, 10);
-	}
-	// 現在のシーンマネージャーを画面左上に表示する
-	if (m_managerState == ManagerState::FadeIn)
-	{
-		font(U"ManagerState: FadeIn").draw(10, 30);
-	}
-	else if(m_managerState == ManagerState::Standby)
-	{
-		font(U"SceneState: Standby").draw(10, 30);
-	}
-	else if (m_managerState == ManagerState::FadeOut)
-	{
-		font(U"SceneState: FadeOut").draw(10, 30);
-	}
-	else if (m_managerState == ManagerState::ChangeScene)
-	{
-		font(U"SceneState: ChangeScene").draw(10, 30);
-	}
+	//// === デバッグ表示 ===
+	//// 現在のシーン状態を画面左上に表示する
+	//if (m_currentScene == SceneState::Title)
+	//{
+	//	font(U"SceneState: Title").draw(10, 10);
+	//}
+	//else
+	//{
+	//	font(U"SceneState: Game").draw(10, 10);
+	//}
+	//// 現在のシーンマネージャーを画面左上に表示する
+	//if (m_managerState == ManagerState::FadeIn)
+	//{
+	//	font(U"ManagerState: FadeIn").draw(10, 30);
+	//}
+	//else if(m_managerState == ManagerState::Standby)
+	//{
+	//	font(U"SceneState: Standby").draw(10, 30);
+	//}
+	//else if (m_managerState == ManagerState::FadeOut)
+	//{
+	//	font(U"SceneState: FadeOut").draw(10, 30);
+	//}
+	//else if (m_managerState == ManagerState::ChangeScene)
+	//{
+	//	font(U"SceneState: ChangeScene").draw(10, 30);
+	//}
 
 	m_fader.Draw();
 }
 
 void Game::startBuilding(int buildingType)
 {
-	Print << U"startBuilding が呼ばれました";
+	//Print << U"startBuilding が呼ばれました";
 	// 建築可能なタイルか確認
 	// 現在選択されているタイルの種類を取得
 	const int currentTileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
 
 	// 草原タイル（ID=2）でのみ建築可能と仮定
-	if (currentTileType != 2)
+	if (currentTileType != 2 && currentTileType != 10)
 	{
-		Print << U"このタイルには建築できません。";
+		//Print << U"このタイルには建築できません。";
 		return;
 	}
 
@@ -276,7 +274,7 @@ void Game::startBuilding(int buildingType)
 	newJob.requiredTime = 5.0; // 建築に必要な時間（例: 5秒）
 	m_activeBuildJobs.push_back(newJob);
 
-	Print << U"建築予約: ({}, {}) - 5秒後"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
+	//Print << U"建築予約: ({}, {}) - 5秒後"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
 }
 
 void Game::startResourceGathering(int tileType)
@@ -298,11 +296,11 @@ void Game::startResourceGathering(int tileType)
 		newJob.resources = resources;
 		newJob.requiredTime = resources[0].amount / 5.0;
 		m_activeJobs.push_back(newJob);
-		Print << U"資源獲得を開始しました...";
+		//Print << U"資源獲得を開始しました...";
 	}
 	else
 	{
-		Print << U"このタイルからは資源を得られません";
+		//Print << U"このタイルからは資源を得られません";
 	}
 }
 
@@ -316,7 +314,7 @@ bool Game::checkAndConsumeResources(int buildingType)
 	{
 		if (m_playerResources[cost.type] < cost.amount)
 		{
-			Print << U"資源「{}」が足りません。"_fmt(ToString(cost.type));
+			//Print << U"資源「{}」が足りません。"_fmt(ToString(cost.type));
 			return false; //資源が不足
 		}
 	}

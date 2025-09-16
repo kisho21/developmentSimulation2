@@ -1,26 +1,5 @@
 ﻿#pragma once
 #include <Siv3D.hpp>
-
-//class CameraController
-//{
-//public:
-//	// コンストラクタにカメラの参照を渡す
-//	CameraController(s3d::DebugCamera3D& cam);
-//
-//	// カメラの視点を設定する
-//	void setView(const s3d::Vec3& eyePosition, const s3d::Vec3& lookAt);
-//
-//private:
-//	s3d::DebugCamera3D& m_cam;
-//};
-
-
-
-
-
-
-
-
 #include "../Core/Config.hpp"
 #include "PlayerInput.hpp"
 

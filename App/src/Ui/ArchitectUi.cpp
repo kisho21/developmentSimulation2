@@ -42,7 +42,7 @@ void ArchitectUi::Draw() const
 			}
 		}
 		break;
-	case 1: // 岩山
+	case 1: //岩山
 		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
 		if (SimpleGUI::Button(U"石を獲得", Vec2(win_x - 220, win_y - 120)))
 		{
@@ -119,6 +119,68 @@ void ArchitectUi::Draw() const
 				m_buildHandler(7);
 			}
 		}
+		break;
+	case 3:	//湖
+		break;
+	case 4:	//鉱山
+		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
+		if (SimpleGUI::Button(U"鉱石を獲得", Vec2(win_x - 220, win_y - 120)))
+		{
+			if (m_resourceHandler)
+			{
+				m_resourceHandler(m_currentTileType);
+			}
+		}
+		break;
+	case 5:	//牧場
+		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
+		if (SimpleGUI::Button(U"羊毛を獲得", Vec2(win_x - 220, win_y - 120)))
+		{
+			if (m_resourceHandler)
+			{
+				m_resourceHandler(m_currentTileType);
+			}
+		}
+		break;
+	case 6:	//農場
+		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
+		if (SimpleGUI::Button(U"食料を獲得", Vec2(win_x - 220, win_y - 120)))
+		{
+			if (m_resourceHandler)
+			{
+				m_resourceHandler(m_currentTileType);
+			}
+		}
+		break;
+	case 7:	//交易所
+		break;
+	case 8:	//精錬所
+		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
+		if (SimpleGUI::Button(U"インゴットを獲得", Vec2(win_x - 220, win_y - 120)))
+		{
+			if (m_resourceHandler)
+			{
+				m_resourceHandler(m_currentTileType);
+			}
+		}
+		break;
+	case 9:	//橋
+		break;
+	case 10:	//家1
+		m_font(U"アップグレード").drawAt(Vec2(win_x - 160, win_y - 200), Palette::Black);
+		//家を建てるボタンを追加
+		if (SimpleGUI::Button(U"住居", Vec2(win_x - 300, win_y - 160)))
+		{
+			if (m_buildHandler)
+			{
+				//家のタイルタイプIDを渡す
+				m_buildHandler(11);
+			}
+		}
+		break;
+	case 11:	//家2
+		break;
+	case 12:	//加工場
 		break;
 	}
 }

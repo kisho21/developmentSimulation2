@@ -120,7 +120,6 @@
     <ClCompile Include="App\src\Core\SceneTitle.cpp" />
     <ClCompile Include="App\src\Player\CameraController.cpp" />
     <ClCompile Include="App\src\Resource\Resource.cpp" />
-    <ClCompile Include="App\src\Resource\ResourceJob.cpp" />
     <ClCompile Include="App\src\Ui\ArchitectUi.cpp" />
     <ClCompile Include="App\src\Ui\InfoUi.cpp" />
     <ClCompile Include="App\src\Util\RayCaster.cpp" />
@@ -348,7 +347,6 @@
     <ClInclude Include="App\src\Ui\InfoUi.hpp" />
     <ClInclude Include="App\src\Util\RayCaster.hpp" />
     <ClInclude Include="App\src\World\BuildJob.hpp" />
-    <ClInclude Include="App\src\World\Grid.hpp" />
     <ClInclude Include="App\src\World\Tile.hpp" />
     <ClInclude Include="stdafx.h" />
   </ItemGroup>
