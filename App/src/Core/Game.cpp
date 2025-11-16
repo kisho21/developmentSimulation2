@@ -27,9 +27,9 @@ Game::Game()
 
 void Game::initLighting() const
 {
-	Graphics3D::SetGlobalAmbientColor(ColorF(0.1));
-	Graphics3D::SetSunColor(ColorF(1.0));							//平行光
-	Graphics3D::SetSunDirection(Vec3(0.3, 1, 0.2).normalized());	//normalized()→スクリーン座標を標準化するため
+	Graphics3D::SetGlobalAmbientColor(ColorF(0.5));
+	Graphics3D::SetSunColor(ColorF(1.0));								//平行光
+	Graphics3D::SetSunDirection(Vec3(-0.2, 1, -0.2).normalized());		//normalized()→スクリーン座標を標準化するため
 }
 
 /*
@@ -50,10 +50,40 @@ void Game::updateCamera()
 void Game::drawSelection() const
 {
 	const double x_gap = (m_selectedTileIndex.col % 2 == 1) ? 0.5 : 0;
-	const Vec3 highlightPos = Vec3{ m_selectedTileIndex.row + x_gap, 0, 0.866 * m_selectedTileIndex.col };
+	const Vec3 center3D = Vec3{ m_selectedTileIndex.row + x_gap, 0, 0.866 * m_selectedTileIndex.col };
 
-	// 選択中のタイルに黄色の枠を描画
-	Box{ highlightPos, 1.0, 0.5, 1.0 }.drawFrame(Palette::Yellow);
+	const double R = 1.0 / Math::Sqrt(3);	//6角形の中心から頂点までの距離
+	constexpr double highlightY = 0.2;		//描画の高さ
+
+	s3d::Array<s3d::Vec3> points3D;			//六角形を構成する3D頂点配列
+
+	//頂点を生成
+	for (int i = 0; i < 6; ++i)
+	{
+		const double angle = 90_deg + i * 60_deg;
+
+		const double x = center3D.x + R * Cos(angle);
+		const double z = center3D.z + R * Sin(angle);		//Z軸が画面奥方向
+
+		points3D.push_back({ x, highlightY, z });
+	}
+
+	//辺の描画
+	const ColorF highlightColor = Palette::Yellow;
+	//constexpr double thickness = 0.1;	//線の太さ
+	for (int i = 0; i < 6; ++i)
+	{
+		const Vec3& p1 = points3D[i];
+		const Vec3& p2 = points3D[(i + 1) % 6];		//最後の頂点は最初に戻る
+
+		Line3D{ p1, p2 }.draw(highlightColor);
+	}
+
+	//const double x_gap = (m_selectedTileIndex.col % 2 == 1) ? 0.5 : 0;
+	//const Vec3 highlightPos = Vec3{ m_selectedTileIndex.row + x_gap, 0, 0.866 * m_selectedTileIndex.col };
+
+	//// 選択中のタイルに黄色の枠を描画
+	//Box{ highlightPos, 1.0, 0.5, 1.0 }.drawFrame(Palette::Yellow);
 }
 
 bool Game::Update()
@@ -202,9 +232,10 @@ void Game::Draw() const
 	}
 	else if (m_currentScene == SceneState::Game)
 	{
-		const ColorF bg{ 0.2, 0.5, 0.8 };
+		const ColorF bg{ 0.1, 0.4, 1.0 };
 		const ScopedRenderTarget3D target{ m_renderTexture.clear(bg) };
 		Graphics3D::SetPSTexture(0, m_tex);
+
 		tile.Draw();
 		drawSelection();		//選択中のタイルをハイライト表示
 
