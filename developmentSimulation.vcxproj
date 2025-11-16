@@ -119,6 +119,7 @@
     <ClCompile Include="App\src\Core\Game.cpp" />
     <ClCompile Include="App\src\Core\SceneTitle.cpp" />
     <ClCompile Include="App\src\Player\CameraController.cpp" />
+    <ClCompile Include="App\src\Resource\Money.cpp" />
     <ClCompile Include="App\src\Resource\Resource.cpp" />
     <ClCompile Include="App\src\Ui\ArchitectUi.cpp" />
     <ClCompile Include="App\src\Ui\InfoUi.cpp" />
@@ -341,6 +342,7 @@
     <ClInclude Include="App\src\Player\CameraController.hpp" />
     <ClInclude Include="App\src\Player\PlayerInput.hpp" />
     <ClInclude Include="App\src\Resource\Build.hpp" />
+    <ClInclude Include="App\src\Resource\Money.hpp" />
     <ClInclude Include="App\src\Resource\Resource.hpp" />
     <ClInclude Include="App\src\Resource\ResourceJob.hpp" />
     <ClInclude Include="App\src\Ui\ArchitectUi.hpp" />

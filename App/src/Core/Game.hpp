@@ -62,9 +62,21 @@ private:
 	InfoUi infoUi;
 	ArchitectUi architectUi;
 
+	const s3d::Array<ResourceType> allResources =
+	{
+		ResourceType::Wood,
+		ResourceType::Stone,
+		ResourceType::Ore,
+		ResourceType::Wool,
+		ResourceType::Food,
+		ResourceType::Timber,
+		ResourceType::Breck,
+		ResourceType::Ingot,
+		ResourceType::Cloth
+	};
 
 	//
-	s3d::Font font;
+	s3d::Font m_font;
 };
 
 // 建物ごとの建築コストを定義する
@@ -91,20 +103,20 @@ private:
 //デバッグ　すべて木1つ
 const std::map<int, std::vector<BuildCost>> s_buildCosts =
 {
-	//家を建てるコスト:木10個
+	//家を建てるコスト
 	{ 10, { { ResourceType::Wood, 1 } } },
-	//家をアップグレードするコスト:木材10個、石レンガ10個、インゴット5個
+	//家をアップグレードするコスト
 	{ 11, { { ResourceType::Timber, 1 } } },
-	//農場を建てるコスト:木5個、石3個
+	//農場を建てるコスト
 	{ 6, { { ResourceType::Wood, 1 } } },
-	//牧場を建てるコスト:木8個
+	//牧場を建てるコスト
 	{ 5, { { ResourceType::Wood, 1 } } },
-	//鉱山を建てるコスト:石8個
+	//鉱山を建てるコスト
 	{ 4, { { ResourceType::Wood, 1 } } },
-	//精錬所を建てるコスト:石15個、石レンガ5個
+	//精錬所を建てるコスト
 	{ 8, { { ResourceType::Wood, 1 } } },
-	//加工場を建てるコスト:木20個、石10個
+	//加工場を建てるコスト
 	{ 12, { { ResourceType::Wood, 1 } } },
-	//交易所を建てるコスト:木材10個、石レンガ10個、布10個
+	//交易所を建てるコスト
 	{ 7, { { ResourceType::Wood, 1 } } }
 };

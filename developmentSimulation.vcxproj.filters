@@ -171,6 +171,9 @@
     <ClCompile Include="App\src\Resource\Resource.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="App\src\Resource\Money.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="App\icon.ico">
@@ -876,6 +879,9 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Resource\Build.hpp">
+      <Filter>Source Files</Filter>
+    </ClInclude>
+    <ClInclude Include="App\src\Resource\Money.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
   </ItemGroup>

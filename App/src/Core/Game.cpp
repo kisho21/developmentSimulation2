@@ -8,12 +8,18 @@ Game::Game()
 	, m_ps{ HLSL{ U"example/shader/hlsl/forward_triplanar.hlsl",U"PS"} }
 	, m_tex{ U"example/texture/uv.png" }
 	, m_selectedTileIndex{ 14,14 }
-	, font{ 20 }
+	, m_font{ 20 }
 {
 	if (!m_ps) throw Error{ U"Failed to load PixelShader" };		//パスが間違っているとき任意でエラーを出すようにできる
 	initLighting();
 	m_title.Init();
 	m_fader.startFadeIn();		//フェードイン処理開始
+
+	//所持資材を0で初期化
+	for (const auto& type : allResources)
+	{
+		m_playerResources[type] = 0;
+	}
 
 	//ArchitectUiに建築ハンドラを設定
 	architectUi.setBuildHandler([this](int type) {
@@ -47,6 +53,7 @@ void Game::updateCamera()
 	m_cameraController.setView(newEyePos, targetPos);
 }*/
 
+//選択中のタイルをハイライト
 void Game::drawSelection() const
 {
 	const double x_gap = (m_selectedTileIndex.col % 2 == 1) ? 0.5 : 0;
@@ -78,12 +85,6 @@ void Game::drawSelection() const
 
 		Line3D{ p1, p2 }.draw(highlightColor);
 	}
-
-	//const double x_gap = (m_selectedTileIndex.col % 2 == 1) ? 0.5 : 0;
-	//const Vec3 highlightPos = Vec3{ m_selectedTileIndex.row + x_gap, 0, 0.866 * m_selectedTileIndex.col };
-
-	//// 選択中のタイルに黄色の枠を描画
-	//Box{ highlightPos, 1.0, 0.5, 1.0 }.drawFrame(Palette::Yellow);
 }
 
 bool Game::Update()
@@ -166,6 +167,8 @@ bool Game::Update()
 					tile.setTileModel(job.index, tile.getModel(job.tileType));
 					//タイルタイプを更新する
 					tile.updateTileType(job.index, job.tileType);
+
+					//デバッグ
 					//Print << U"建築完了: ({}, {})"_fmt(job.index.row, job.index.col);
 					return true;
 				}
@@ -173,10 +176,10 @@ bool Game::Update()
 			});
 
 			// ... 既存のデバッグ表示 ...
-			for (const auto& pair : m_playerResources)
+			/*for (const auto& pair : m_playerResources)
 			{
 				Print << U"{} : {}個"_fmt(ToString(pair.first), pair.second);
-			}
+			}*/
 
 		}
 		break;
@@ -239,6 +242,44 @@ void Game::Draw() const
 		tile.Draw();
 		drawSelection();		//選択中のタイルをハイライト表示
 
+		//建築残り時間ゲージの描画
+		for (const auto& job : m_activeBuildJobs)
+		{
+			//タイル中心の3D座標計算
+			const GridIndex& index = job.index;
+			const double x_gap = (index.col % 2 == 1) ? 0.5 : 0;
+			const Vec3 tileCenter = Vec3{ index.row + x_gap, 0, 0.866 * index.col };
+
+			//ゲージの中心座標
+			const Vec3 gaugeCenter = tileCenter + Vec3(0, 1.0, 0);	//Y軸方向に1.0上
+
+			//進行度の計算（0.0から1.0）
+			const double progress = s3d::Min(job.elapsedTime / job.requiredTime, 1.0);
+
+			//ゲージのサイズ
+			constexpr double gaugeWidth = 0.8;	//ゲージの幅
+			constexpr double gaugeHeight = 0.1; //ゲージの高さ
+			constexpr double gaugeDepth = 0.1;	//ゲージの奥行き
+
+			//ゲージ全体の枠（背景）を描画
+			const Box frameBox{ gaugeCenter, gaugeWidth, gaugeHeight, gaugeDepth };
+			frameBox.drawFrame(ColorF(1.0, 0.0, 1.0, 1.0));
+
+			//ゲージの進捗を描画
+			if (progress < 1.0)
+			{
+				//埋まり部分の幅
+				const double filledWidth = gaugeWidth * progress;
+				//ゲージの左端から伸びる
+				const double xOffset = -(gaugeWidth - filledWidth) / 2.0;
+
+				const Vec3 filledCenter = gaugeCenter + Vec3(xOffset, 0, 0);
+				const Box filledBox{ filledCenter, filledWidth, gaugeHeight * 0.9, gaugeDepth * 0.9 };	//枠より少し小さくする
+
+				filledBox.draw(ColorF(1.0, 0.5, 1.0, 0.9));
+			}
+		}
+
 		Graphics3D::Flush();
 		m_renderTexture.resolve();
 		Shader::LinearToScreen(m_renderTexture);
@@ -281,8 +322,8 @@ void Game::Draw() const
 void Game::startBuilding(int buildingType)
 {
 	//Print << U"startBuilding が呼ばれました";
-	// 建築可能なタイルか確認
-	// 現在選択されているタイルの種類を取得
+	//建築可能なタイルか確認
+	//現在選択されているタイルの種類を取得
 	const int currentTileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
 
 	// 草原タイル（ID=2）でのみ建築可能と仮定
@@ -292,17 +333,17 @@ void Game::startBuilding(int buildingType)
 		return;
 	}
 
-	// 建築に必要な資源をチェック、消費
+	//建築に必要な資源をチェック、消費
 	if (!checkAndConsumeResources(buildingType))
 	{
 		return; //資源が足りなければ処理を中断
 	}
 
-	// 建築タスクを作成
+	//建築タスクを作成
 	BuildJob newJob;
 	newJob.index = m_selectedTileIndex;
-	newJob.tileType = buildingType; // どの建物を建てるかのIDをセット
-	newJob.requiredTime = 5.0; // 建築に必要な時間（例: 5秒）
+	newJob.tileType = buildingType;		//どの建物を建てるかのIDをセット
+	newJob.requiredTime = 5.0;			//建築に必要な時間（5秒）
 	m_activeBuildJobs.push_back(newJob);
 
 	//Print << U"建築予約: ({}, {}) - 5秒後"_fmt(m_selectedTileIndex.row, m_selectedTileIndex.col);
