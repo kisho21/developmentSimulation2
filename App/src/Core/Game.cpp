@@ -28,8 +28,8 @@ Game::Game()
 	});
 	//ArchitectUiに資源獲得ハンドラを設定
 	architectUi.setResourceHandler([this](int type) {
-		this->startResourceGathering(type);
-		//this->debugStartResourceGathering(type);
+		//this->startResourceGathering(type);
+		this->debugStartResourceGathering(type);
 	});
 }
 
@@ -127,6 +127,7 @@ bool Game::Update()
 			if (newCol >= 0 && newCol < tileTypes.size() && newRow >= 0 && newRow < tileTypes[0].size())
 			{
 				m_selectedTileIndex = { newRow, newCol };
+				infoUi.setDrawInfo(m_selectedTileIndex, tile);
 			}
 
 			//選択されたタイルの種類に応じてUIを表示

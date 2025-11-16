@@ -12,6 +12,12 @@ void InfoUi::setResources(const std::map<ResourceType, int>& resources)
 	m_resources = resources;
 }
 
+void InfoUi::setDrawInfo(const GridIndex& index, const Tile& tile)
+{
+	m_selectedTileIndex = index;
+	m_pTile = &tile;	//参照をポインタとして保持
+}
+
 void InfoUi::Draw() const
 {
 	int win_x = 1280;
@@ -36,4 +42,26 @@ void InfoUi::Draw() const
 	const int currentMoney = Money::getAmount();
 
 	m_font(U"所持金: {} G"_fmt(currentMoney)).draw(moneyBasePos.x, moneyBasePos.y);
+
+	//画面左下にタイル説明表示
+	if (m_pTile)
+	{
+		//m_pTileからgetTileTypes()を呼び出す
+		const auto& tileTypes = m_pTile->getTileTypes();
+
+		if (m_selectedTileIndex.col < tileTypes.size() && m_selectedTileIndex.row < tileTypes[0].size())
+		{
+			const int tileType = tileTypes[m_selectedTileIndex.col][m_selectedTileIndex.row];
+			const s3d::Array<s3d::String> explanation = TileExplanation::getExplanation(tileType);
+
+			const Vec2 expBasePos{ 20, win_y - 80 };	//描画位置
+			double yOffset = 0;
+
+			for (const auto& line : explanation)
+			{
+				m_font(line).draw(expBasePos.x, expBasePos.y + yOffset);
+				yOffset += 25;	//2、3行目を下にずらす
+			}
+		}
+	}
 }

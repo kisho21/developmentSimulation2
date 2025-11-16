@@ -10,8 +10,12 @@ const std::map<int, std::vector<TileResource>> Resource::m_tileResources =
 	{ 4, { { ResourceType::Ore, 1 } } },		// 鉱山:鉱石
 	{ 5, { { ResourceType::Wool, 1 } } },		// 牧場:羊毛
 	{ 6, { { ResourceType::Food, 1 } } },		// 農場:食料
-	{ 7, { { ResourceType::Timber, 1 }, { ResourceType::Breck, 1 }, { ResourceType::Cloth, 1 } } },      // 加工場:木材、石レンガ、布
+	{ 7, { } },									// 交易所:資源無し
 	{ 8, { { ResourceType::Ingot, 1 } } },		// 精錬所:インゴット
+	{ 9, { } },									// 橋:資源なし
+	{ 10, { } },								// 民家1:資源なし
+	{ 11, { } },								// 民家2:資源なし
+	{ 12, { { ResourceType::Timber, 1 }, { ResourceType::Breck, 1 }, { ResourceType::Cloth, 1 } } }		// 加工場:木材、石レンガ、布
 };
 
 //タイルタイプに応じた資源情報を返す

@@ -21,7 +21,7 @@ inline String ToString(ResourceType type)
 {
 	switch (type)
 	{
-	case ResourceType::Wood: return U"木材";
+	case ResourceType::Wood: return U"原木";
 	case ResourceType::Stone: return U"石材";
 	case ResourceType::Ore: return U"鉱石";
 	case ResourceType::Wool: return U"羊毛";
