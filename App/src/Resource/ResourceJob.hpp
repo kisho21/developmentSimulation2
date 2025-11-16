@@ -5,6 +5,8 @@
 //資源獲得タスクの情報を保持する構造体
 struct ResourceJob
 {
+	GridIndex index;
+
 	//獲得する資源のタイプと量
 	std::vector<TileResource> resources;
 
@@ -12,5 +14,5 @@ struct ResourceJob
 	double elapsedTime = 0.0;
 
 	//タスク完了までに必要な時間
-	double requiredTime;
+	double requiredTime = 0.0;
 };

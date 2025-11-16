@@ -7,6 +7,6 @@ struct BuildJob
 {
 	GridIndex index;
 	double elapsedTime = 0.0;
-	double requiredTime;
+	double requiredTime = 0.0;
 	int tileType;
 };

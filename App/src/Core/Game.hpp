@@ -57,10 +57,13 @@ private:
 	void drawSelection() const;
 	void startBuilding(int buildingType);
 	void startResourceGathering(int tileType);
+	void debugStartResourceGathering(int tileType);
 
 	Tile tile;
 	InfoUi infoUi;
 	ArchitectUi architectUi;
+
+	bool uiFlg;		//UI表示切替
 
 	const s3d::Array<ResourceType> allResources =
 	{

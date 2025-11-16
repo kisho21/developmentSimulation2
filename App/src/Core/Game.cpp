@@ -9,6 +9,7 @@ Game::Game()
 	, m_tex{ U"example/texture/uv.png" }
 	, m_selectedTileIndex{ 14,14 }
 	, m_font{ 20 }
+	, uiFlg{ true }
 {
 	if (!m_ps) throw Error{ U"Failed to load PixelShader" };		//パスが間違っているとき任意でエラーを出すようにできる
 	initLighting();
@@ -28,6 +29,7 @@ Game::Game()
 	//ArchitectUiに資源獲得ハンドラを設定
 	architectUi.setResourceHandler([this](int type) {
 		this->startResourceGathering(type);
+		//this->debugStartResourceGathering(type);
 	});
 }
 
@@ -175,6 +177,9 @@ bool Game::Update()
 				return false;
 			});
 
+			if (uiFlg && KeyAlt.down()) { uiFlg = false; }
+			else if (!uiFlg && KeyAlt.down()) { uiFlg = true; }
+
 			// ... 既存のデバッグ表示 ...
 			/*for (const auto& pair : m_playerResources)
 			{
@@ -280,12 +285,53 @@ void Game::Draw() const
 			}
 		}
 
+		//資源採取ジョブのゲージ描画を【追加】
+		for (const auto& job : m_activeJobs)
+		{
+			//タイル中心の3D座標計算
+			const GridIndex& index = job.index;
+			const double x_gap = (index.col % 2 == 1) ? 0.5 : 0;
+			const Vec3 tileCenter = Vec3{ index.row + x_gap, 0, 0.866 * index.col };
+
+			//ゲージの中心座標 (Y軸方向に1.0上)
+			const Vec3 gaugeCenter = tileCenter + Vec3(0, 1.0, 0);
+
+			//進行度の計算（0.0から1.0）
+			const double progress = s3d::Min(job.elapsedTime / job.requiredTime, 1.0);
+
+			//ゲージのサイズ
+			constexpr double gaugeWidth = 0.8;	//ゲージの幅
+			constexpr double gaugeHeight = 0.1; //ゲージの高さ
+			constexpr double gaugeDepth = 0.1;	//ゲージの奥行き
+
+			//ゲージ全体の枠（背景）を描画
+			const Box frameBox{ gaugeCenter, gaugeWidth, gaugeHeight, gaugeDepth };
+			frameBox.drawFrame(ColorF(0.8, 0.3, 0.0, 0.8));
+
+			//ゲージの進捗を描画 (建築と区別するため、例えば青色に設定)
+			if (progress < 1.0)
+			{
+				//埋まり部分の幅
+				const double filledWidth = gaugeWidth * progress;
+				//ゲージの左端から伸びる
+				const double xOffset = -(gaugeWidth - filledWidth) / 2.0;
+
+				const Vec3 filledCenter = gaugeCenter + Vec3(xOffset, 0, 0);
+				const Box filledBox{ filledCenter, filledWidth, gaugeHeight * 0.9, gaugeDepth * 0.9 };	//枠より少し小さくする
+
+				filledBox.draw(ColorF(1.0, 0.7, 0.0, 0.9));
+			}
+		}
+
 		Graphics3D::Flush();
 		m_renderTexture.resolve();
 		Shader::LinearToScreen(m_renderTexture);
 
-		infoUi.Draw();
-		architectUi.Draw();
+		if (uiFlg)
+		{
+			infoUi.Draw();
+			architectUi.Draw();
+		}
 	}
 	
 	//// === デバッグ表示 ===
@@ -351,13 +397,13 @@ void Game::startBuilding(int buildingType)
 
 void Game::startResourceGathering(int tileType)
 {
-	// 現在選択されているタイルの種類を取得
+	//現在選択されているタイルの種類を取得
 	const int currentTileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
 
-	// UIが提供したタイルタイプが、実際に選択されているタイルタイプと一致するか確認
+	//UIが提供したタイルタイプが実際に選択されているタイルタイプと一致するか確認
 	if (tileType != currentTileType)
 	{
-		return; // 不一致の場合は何もしない
+		return; //不一致の場合は何もしない
 	}
 
 	const auto& resources = Resource::getResources(tileType);
@@ -366,13 +412,39 @@ void Game::startResourceGathering(int tileType)
 	{
 		ResourceJob newJob;
 		newJob.resources = resources;
-		newJob.requiredTime = resources[0].amount / 5.0;
+		newJob.requiredTime = 5.0;				//採取にかかる時間5秒
+		newJob.elapsedTime = 0.0;				//時間経過を0に初期化
+		newJob.index = m_selectedTileIndex;		//ゲージ描画のため、選択中のタイルインデックスを保存
 		m_activeJobs.push_back(newJob);
 		//Print << U"資源獲得を開始しました...";
 	}
 	else
 	{
 		//Print << U"このタイルからは資源を得られません";
+	}
+}
+
+void Game::debugStartResourceGathering(int tileType)
+{
+	//現在選択されているタイルの種類を取得
+	const int currentTileType = tile.getTileTypes()[m_selectedTileIndex.col][m_selectedTileIndex.row];
+
+	//UIが提供したタイルタイプが、実際に選択されているタイルタイプと一致するか確認
+	if (tileType != currentTileType)
+	{
+		return; //不一致の場合は何もしない
+	}
+
+	const auto& resources = Resource::getResources(tileType);
+
+	if (!resources.empty())
+	{
+		//即時獲得処理
+		for (const auto& res : resources)
+		{
+			m_playerResources[res.type] += res.amount;
+		}
+		//Print << U"資源の即時獲得が完了しました！";
 	}
 }
 
