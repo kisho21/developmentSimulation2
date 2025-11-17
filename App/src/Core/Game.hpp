@@ -58,6 +58,7 @@ private:
 	void startBuilding(int buildingType);
 	void startResourceGathering(int tileType);
 	void debugStartResourceGathering(int tileType);
+	void startProcessing(int facilityType);			//精錬所、加工場での資源消費・獲得処理
 
 	Tile tile;
 	InfoUi infoUi;

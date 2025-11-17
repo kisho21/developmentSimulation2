@@ -18,6 +18,11 @@ void ArchitectUi::hide()
 	m_isVisible = false;
 }
 
+void ArchitectUi::setProcessHandler(ProcessHandler handler)
+{
+	m_processHandler = handler;
+}
+
 void ArchitectUi::Draw() const
 {
 	if (!m_isVisible) return;
@@ -156,14 +161,24 @@ void ArchitectUi::Draw() const
 		break;
 	case 8:	//精錬所
 		m_font(U"資源を得る").drawAt(Vec2(win_x - 160, win_y - 180), Palette::Black);
-		if (SimpleGUI::Button(U"インゴットを獲得", Vec2(win_x - 220, win_y - 120)))
+
+		if (m_processHandler)
+		{
+			if (SimpleGUI::Button(U"精錬: 鉱石 -> インゴット", Vec2{ 1000, 600 }))
+			{
+				m_processHandler(8);	//精錬所IDを渡す
+			}
+		}
+		break;
+
+		/*if (SimpleGUI::Button(U"インゴットを獲得", Vec2(win_x - 220, win_y - 120)))
 		{
 			if (m_resourceHandler)
 			{
 				m_resourceHandler(m_currentTileType);
 			}
 		}
-		break;
+		break;*/
 	case 9:	//橋
 		break;
 	case 10:	//家1
@@ -181,6 +196,24 @@ void ArchitectUi::Draw() const
 	case 11:	//家2
 		break;
 	case 12:	//加工場
+		if (m_processHandler)
+		{
+			//原木→木材 (ID 1201)
+			if (SimpleGUI::Button(U"加工: 原木 -> 木材", Vec2{ 1000, 600 }))
+			{
+				m_processHandler(1201);
+			}
+			//石材→レンガ (ID 1202)
+			if (SimpleGUI::Button(U"加工: 石材 -> レンガ", Vec2{ 1000, 640 }))
+			{
+				m_processHandler(1202);
+			}
+			//羊毛→布 (ID 1203)
+			if (SimpleGUI::Button(U"加工: 羊毛 -> 布", Vec2{ 1000, 680 }))
+			{
+				m_processHandler(1203);
+			}
+		}
 		break;
 	}
 }

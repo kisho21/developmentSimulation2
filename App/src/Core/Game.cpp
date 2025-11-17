@@ -3,7 +3,7 @@
 
 Game::Game()
 	: m_renderTexture{ Scene::Size(),TextureFormat::R8G8B8A8_Unorm_SRGB,HasDepth::Yes }
-	, m_cam{ m_renderTexture.size(), Config::CamFOV, Config::CamInitialPosition }
+	, m_cam{ m_renderTexture.size(), Config::CamFOV, Config::CamInitialPosition, Vec3{ 15, 0, 15 } }
 	, m_cameraController{ m_cam }
 	, m_ps{ HLSL{ U"example/shader/hlsl/forward_triplanar.hlsl",U"PS"} }
 	, m_tex{ U"example/texture/uv.png" }
@@ -30,6 +30,10 @@ Game::Game()
 	architectUi.setResourceHandler([this](int type) {
 		//this->startResourceGathering(type);
 		this->debugStartResourceGathering(type);
+	});
+	//ArchitectUiに資源加工ハンドラを設定
+	architectUi.setProcessHandler([this](int type) {
+		this->startProcessing(type);
 	});
 }
 
@@ -107,7 +111,7 @@ bool Game::Update()
 		}
 		else if (m_currentScene == SceneState::Game)
 		{
-
+			//m_cam.update(2.0);
 			m_cameraController.Update(Scene::DeltaTime());
 			Graphics3D::SetCameraTransform(m_cam);
 
@@ -471,4 +475,60 @@ bool Game::checkAndConsumeResources(int buildingType)
 	}
 
 	return true; //資源を消費できた
+}
+
+void Game::startProcessing(int facilityType)
+{
+	//入力と出力の資源を定義する構造体
+	struct Conversion
+	{
+		ResourceType inputType;
+		int inputAmount;
+		ResourceType outputType;
+		int outputAmount;
+	};
+
+	//処理IDに基づいて変換ルールを決定
+	Conversion conversion;
+	bool isValidConversion = true;
+
+	switch (facilityType)
+	{
+	case 8:		//精錬所:鉱石→インゴット
+		conversion = { ResourceType::Ore, 1, ResourceType::Ingot, 1 };
+		break;
+
+	case 1201:	//加工場:原木→木材
+		conversion = { ResourceType::Wood, 1, ResourceType::Timber, 1 };
+		break;
+
+	case 1202:	//加工場:石材→レンガ
+		conversion = { ResourceType::Stone, 1, ResourceType::Breck, 1 };
+		break;
+
+	case 1203:	//加工場:羊毛→布
+		conversion = { ResourceType::Wool, 1, ResourceType::Cloth, 1 };
+		break;
+
+	default:
+		isValidConversion = false;
+		return;
+	}
+
+	if (!isValidConversion) return;
+
+	//資源が足りているかチェック
+	if (m_playerResources[conversion.inputType] < conversion.inputAmount)
+	{
+		// Print << U"資源「{}」が足りません。"_fmt(ToString(conversion.inputType)); //デバッグ用
+		return; //資源不足の場合はここで終了
+	}
+
+	//資源を消費
+	m_playerResources[conversion.inputType] -= conversion.inputAmount;
+
+	//資源を獲得
+	m_playerResources[conversion.outputType] += conversion.outputAmount;
+
+	// Print << U"加工完了: {} -> {}"_fmt(ToString(conversion.inputType), ToString(conversion.outputType)); //デバッグ用
 }
