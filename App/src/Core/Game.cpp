@@ -38,6 +38,8 @@ Game::Game()
 	});
 	//ArchitectUiに建築コスト情報を設定
 	architectUi.setBuildCosts(&s_buildCosts);
+	//ArchitectUiに所持資源情報を設定
+	architectUi.setPlayerResources(&m_playerResources);
 }
 
 void Game::initLighting() const

@@ -2,6 +2,7 @@
 
 ArchitectUi::ArchitectUi()
 	: m_botUi{ U"image/ui/2d/ui-bottom.png" }
+	, m_confirmUi{ U"image/ui/2d/ui-bottom.png" }
 	, m_font{ 20 }
 	, m_buttonSe{ U"music/se/button.mp3" }
 {
@@ -218,12 +219,15 @@ void ArchitectUi::Draw()
 	//建築確認ダイアログの描画と処理
 	if (m_showConfirm)
 	{
+		//UI表示
+		m_confirmUi.draw(Vec2(win_x / 2 - 160, win_y / 2 - 120));
+
 		//画面中央の位置を計算
 		const Vec2 center = Scene::Center();
-		Vec2 currentPos = center - Vec2(0, 100);	//表示開始位置
+		Vec2 currentPos = center - Vec2(0, 90);	//表示開始位置
 
 		//「建築しますか？」の表示
-		m_font(U"建築しますか？").drawAt(currentPos, Palette::White);
+		m_font(U"建築しますか？").drawAt(currentPos, ColorF(0.0));
 		currentPos.y += 40;	//次の行へ
 
 		//必要資源の表示
@@ -233,18 +237,28 @@ void ArchitectUi::Draw()
 
 			for (const auto& cost : costs)
 			{
+				//資源の所持量を取得 (m_pPlayerResourcesが設定されているか確認)
+				int playerAmount = 0;
+				if (m_pPlayerResources && m_pPlayerResources->count(cost.type))
+				{
+					playerAmount = m_pPlayerResources->at(cost.type);
+				}
+
+				//所持量が必要量を下回っているかチェック
+				const ColorF textColor = (playerAmount < cost.amount) ? ColorF(1.0, 0.0, 0.0) : ColorF(0.0);
+
 				//「資源名：量」の表記
 				const String line = U"{}：{}"_fmt(ToString(cost.type), cost.amount);
-				m_font(line).drawAt(currentPos, Palette::Yellow); // 資源が足りない場合の色分けは省略
+				m_font(line).drawAt(currentPos, textColor);
 				currentPos.y += 25;	//縦に並べる
 			}
 		}
 
-		currentPos.y += 40;	//ボタン行へ
+		currentPos.y += 30;	//ボタン行へ
 
 		//はい、いいえボタン
-		const Vec2 yesPos = currentPos - Vec2(50, 0);	//中央から左に寄せる
-		const Vec2 noPos = currentPos + Vec2(50, 0);	//中央から右に寄せる
+		const Vec2 yesPos = currentPos - Vec2(100, 0);	//中央から左に寄せる
+		const Vec2 noPos = currentPos + Vec2(0, 0);		//中央から右に寄せる
 
 		//「はい」ボタン
 		if (SimpleGUI::Button(U"はい", yesPos))

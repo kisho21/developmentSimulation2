@@ -25,9 +25,13 @@ public:
 	void setProcessHandler(ProcessHandler handler);
 	//建築コスト情報を設定する関数
 	void setBuildCosts(const std::map<int, std::vector<BuildCost>>* costs) { m_pBuildCosts = costs; }
+	//プレイヤーの所持資源を設定する関数
+	void setPlayerResources(const std::map<ResourceType, int>* resources) { m_pPlayerResources = resources; }
 
 private:
 	Texture m_botUi;
+	Texture m_confirmUi;
+
 	bool m_isVisible = false;
 	int m_currentTileType = -1;
 	s3d::Font m_font;
@@ -46,4 +50,7 @@ private:
 	//建築確認ダイアログの状態管理
 	bool m_showConfirm = false;			//確認ダイアログ表示フラグ
 	int m_pendingBuildType = -1;		//建築開始を待っているタイルタイプID
+
+	//プレイヤーの所持資源を保持するポインタ
+	const std::map<ResourceType, int>* m_pPlayerResources = nullptr;
 };
