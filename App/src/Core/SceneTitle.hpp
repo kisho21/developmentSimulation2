@@ -24,6 +24,8 @@ private:
 	Model m_house1Model;		//民家レベル1
 	double m_rotationAngle = 0.0;
 
+	Audio m_bgm;
+
 	//
 	bool m_isKeyInputDetected = false;
 };

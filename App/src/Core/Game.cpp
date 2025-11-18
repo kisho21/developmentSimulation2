@@ -9,6 +9,7 @@ Game::Game()
 	, m_tex{ U"example/texture/uv.png" }
 	, m_selectedTileIndex{ 14,14 }
 	, m_font{ 20 }
+	, m_bgm{ Audio::Stream, U"music/bgm/bgm.mp3", Loop::Yes }
 	, uiFlg{ true }
 {
 	if (!m_ps) throw Error{ U"Failed to load PixelShader" };		//パスが間違っているとき任意でエラーを出すようにできる
@@ -29,12 +30,14 @@ Game::Game()
 	//ArchitectUiに資源獲得ハンドラを設定
 	architectUi.setResourceHandler([this](int type) {
 		//this->startResourceGathering(type);
-		this->debugStartResourceGathering(type);
+		this->debugStartResourceGathering(type);	//即時採取
 	});
 	//ArchitectUiに資源加工ハンドラを設定
 	architectUi.setProcessHandler([this](int type) {
 		this->startProcessing(type);
 	});
+	//ArchitectUiに建築コスト情報を設定
+	architectUi.setBuildCosts(&s_buildCosts);
 }
 
 void Game::initLighting() const
@@ -114,6 +117,8 @@ bool Game::Update()
 			//m_cam.update(2.0);
 			m_cameraController.Update(Scene::DeltaTime());
 			Graphics3D::SetCameraTransform(m_cam);
+
+			m_bgm.play();
 
 			infoUi.setResources(m_playerResources);
 
@@ -237,7 +242,7 @@ bool Game::Update()
 	return true;
 }
 
-void Game::Draw() const
+void Game::Draw()
 {
 	if (m_currentScene == SceneState::Title)
 	{

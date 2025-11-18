@@ -7,6 +7,7 @@ SceneTitle::SceneTitle()
 	, m_tex{ U"example/texture/uv.png" }
 	, m_camera{ m_renderTexture.size(), 30_deg, Vec3{ 0, 1, -3 },Vec3{ 0, -0.5, 0 } }
 	, m_house1Model{ U"image/model/building-house.obj" }
+	, m_bgm{ Audio::Stream, U"music/bgm/bgm.mp3", Loop::Yes }
 {
 	Model::RegisterDiffuseTextures(m_house1Model, TextureDesc::MippedSRGB);
 }
@@ -22,11 +23,14 @@ void SceneTitle::Update()
 	m_camera.update(2.0);
 	Graphics3D::SetCameraTransform(m_camera);
 
+	m_bgm.play();
+
 	m_rotationAngle += 15_deg * s3d::Scene::DeltaTime();
 
 	//キー入力でシーン切り替え
 	if (KeySpace.down())
 	{
+		m_bgm.stop();
 		m_requestChange = true;
 		m_isKeyInputDetected = true;
 	}

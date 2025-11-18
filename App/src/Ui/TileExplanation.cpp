@@ -13,8 +13,8 @@ const s3d::Array<s3d::String> TileExplanation::s_TileNames =
 	U"交易所",
 	U"精錬所",
 	U"橋",
-	U"民家1",
-	U"民家2",
+	U"民家",
+	U"大きな民家",
 	U"加工場"
 };
 

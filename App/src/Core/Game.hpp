@@ -22,7 +22,7 @@ class Game
 public:
 	Game();
 	bool Update();
-	void Draw() const;
+	void Draw();
 
 private:
 	//シーン切り替え関連
@@ -37,6 +37,7 @@ private:
 
 	PixelShader m_ps;
 	Texture m_tex;
+	Audio m_bgm;
 
 	//選択中のタイルの座標
 	GridIndex m_selectedTileIndex;
@@ -84,43 +85,43 @@ private:
 };
 
 // 建物ごとの建築コストを定義する
-//const std::map<int, std::vector<BuildCost>> s_buildCosts =
-//{
-//	//家を建てるコスト:木10個
-//	{ 10, { { ResourceType::Wood, 10 } } },
-//	//家をアップグレードするコスト:木材10個、石レンガ10個、インゴット5個
-//	{ 11, { { ResourceType::Timber, 10 },{ ResourceType::Breck, 10 },{ ResourceType::Ingot, 5 } } },
-//	//農場を建てるコスト:木5個、石3個
-//	{ 6, { { ResourceType::Wood, 5 }, { ResourceType::Stone, 3 } } },
-//	//牧場を建てるコスト:木8個
-//	{ 5, { { ResourceType::Wood, 8 } } },
-//	//鉱山を建てるコスト:石8個
-//	{ 4, { { ResourceType::Stone, 8 } } },
-//	//精錬所を建てるコスト:石15個、石レンガ5個
-//	{ 8, { { ResourceType::Stone, 15 }, { ResourceType::Breck, 5 } } },
-//	//加工場を建てるコスト:木20個、石10個
-//	{ 12, { { ResourceType::Wood, 20 },{ ResourceType::Stone, 10 } } },
-//	//交易所を建てるコスト:木材10個、石レンガ10個、布10個
-//	{ 7, { { ResourceType::Timber, 10 }, { ResourceType::Breck, 10 },{ ResourceType::Cloth, 10 } } }
-//};
-
-//デバッグ　すべて木1つ
 const std::map<int, std::vector<BuildCost>> s_buildCosts =
 {
-	//家を建てるコスト
-	{ 10, { { ResourceType::Wood, 1 } } },
-	//家をアップグレードするコスト
-	{ 11, { { ResourceType::Timber, 1 } } },
-	//農場を建てるコスト
-	{ 6, { { ResourceType::Wood, 1 } } },
-	//牧場を建てるコスト
-	{ 5, { { ResourceType::Wood, 1 } } },
-	//鉱山を建てるコスト
-	{ 4, { { ResourceType::Wood, 1 } } },
-	//精錬所を建てるコスト
-	{ 8, { { ResourceType::Wood, 1 } } },
-	//加工場を建てるコスト
-	{ 12, { { ResourceType::Wood, 1 } } },
-	//交易所を建てるコスト
-	{ 7, { { ResourceType::Wood, 1 } } }
+	//家を建てるコスト:原木10個
+	{ 10, { { ResourceType::Wood, 10 } } },
+	//家をアップグレードするコスト:木材10個、石レンガ10個、インゴット5個
+	{ 11, { { ResourceType::Timber, 10 },{ ResourceType::Breck, 10 },{ ResourceType::Ingot, 5 } } },
+	//農場を建てるコスト:原木5個、石材3個
+	{ 6, { { ResourceType::Wood, 5 }, { ResourceType::Stone, 3 } } },
+	//牧場を建てるコスト:原木8個
+	{ 5, { { ResourceType::Wood, 8 } } },
+	//鉱山を建てるコスト:石材8個
+	{ 4, { { ResourceType::Stone, 8 } } },
+	//精錬所を建てるコスト:石材15個、石レンガ5個
+	{ 8, { { ResourceType::Stone, 15 }, { ResourceType::Breck, 5 } } },
+	//加工場を建てるコスト:原木20個、石材10個
+	{ 12, { { ResourceType::Wood, 20 },{ ResourceType::Stone, 10 } } },
+	//交易所を建てるコスト:木材10個、石レンガ10個、布10個
+	{ 7, { { ResourceType::Timber, 10 }, { ResourceType::Breck, 10 },{ ResourceType::Cloth, 10 } } }
 };
+
+//デバッグ　すべて木1つ
+//const std::map<int, std::vector<BuildCost>> s_buildCosts =
+//{
+//	//家を建てるコスト
+//	{ 10, { { ResourceType::Wood, 1 } } },
+//	//家をアップグレードするコスト
+//	{ 11, { { ResourceType::Wood, 1 } } },
+//	//農場を建てるコスト
+//	{ 6, { { ResourceType::Wood, 1 } } },
+//	//牧場を建てるコスト
+//	{ 5, { { ResourceType::Wood, 1 } } },
+//	//鉱山を建てるコスト
+//	{ 4, { { ResourceType::Wood, 1 } } },
+//	//精錬所を建てるコスト
+//	{ 8, { { ResourceType::Wood, 1 } } },
+//	//加工場を建てるコスト
+//	{ 12, { { ResourceType::Wood, 1 } } },
+//	//交易所を建てるコスト
+//	{ 7, { { ResourceType::Wood, 1 } } }
+//};

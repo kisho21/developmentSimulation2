@@ -22,6 +22,20 @@ public:
 
 private:
 	Texture m_topUi;
+	Texture m_iconUi;
+	Texture m_explanationUi;
+	Texture m_resourceUi;
+
+	Texture m_woodIcon;
+	Texture m_stoneIcon;
+	Texture m_oreIcon;
+	Texture m_woolIcon;
+	Texture m_foodIcon;
+	Texture m_timberIcon;
+	Texture m_breckIcon;
+	Texture m_ingotIcon;
+	Texture m_clothIcon;
+
 	Font m_font;
 
 	//プレイヤーの資源所持数を直接保持
