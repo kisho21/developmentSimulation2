@@ -124,7 +124,6 @@
     <ClCompile Include="App\src\Ui\ArchitectUi.cpp" />
     <ClCompile Include="App\src\Ui\InfoUi.cpp" />
     <ClCompile Include="App\src\Ui\TileExplanation.cpp" />
-    <ClCompile Include="App\src\Util\RayCaster.cpp" />
     <ClCompile Include="App\src\World\Tile.cpp" />
     <ClCompile Include="Main.cpp" />
     <ClCompile Include="stdafx.cpp">
@@ -349,7 +348,6 @@
     <ClInclude Include="App\src\Ui\ArchitectUi.hpp" />
     <ClInclude Include="App\src\Ui\InfoUi.hpp" />
     <ClInclude Include="App\src\Ui\TileExplanation.hpp" />
-    <ClInclude Include="App\src\Util\RayCaster.hpp" />
     <ClInclude Include="App\src\World\BuildJob.hpp" />
     <ClInclude Include="App\src\World\Tile.hpp" />
     <ClInclude Include="stdafx.h" />

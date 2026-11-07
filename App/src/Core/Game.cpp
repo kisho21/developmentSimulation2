@@ -29,8 +29,8 @@ Game::Game()
 	});
 	//ArchitectUiに資源獲得ハンドラを設定
 	architectUi.setResourceHandler([this](int type) {
-		//this->startResourceGathering(type);
-		this->debugStartResourceGathering(type);	//即時採取
+		this->startResourceGathering(type);
+		//this->debugStartResourceGathering(type);	//即時採取
 	});
 	//ArchitectUiに資源加工ハンドラを設定
 	architectUi.setProcessHandler([this](int type) {

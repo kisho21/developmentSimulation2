@@ -7,8 +7,11 @@
 
 void Main()
 {
+	//Scene::SetResizeMode(ResizeMode::Keep);
 	Window::Resize(1280, 720);				//ウィンドウサイズ
-
+	//Window::Resize(800, 600);
+	//Window::SetFullscreen(true);
+	
 	Game game;
 
 	while (System::Update())

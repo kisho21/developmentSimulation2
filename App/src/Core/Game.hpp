@@ -80,7 +80,6 @@ private:
 		ResourceType::Cloth
 	};
 
-	//
 	s3d::Font m_font;
 };
 

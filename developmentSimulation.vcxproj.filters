@@ -159,9 +159,6 @@
     <ClCompile Include="App\src\Ui\ArchitectUi.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="App\src\Util\RayCaster.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="App\src\Core\SceneTitle.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -861,9 +858,6 @@
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Ui\ArchitectUi.hpp">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="App\src\Util\RayCaster.hpp">
       <Filter>Source Files</Filter>
     </ClInclude>
     <ClInclude Include="App\src\Core\SceneTitle.hpp">

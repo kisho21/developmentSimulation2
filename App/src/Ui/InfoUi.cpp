@@ -52,8 +52,8 @@ void InfoUi::Draw() const
 	//画面右上に資金の所持数を表示
 	const Vec2 moneyBasePos{ win_x / 2 + 300, 10 };
 	const int currentMoney = Money::getAmount();
-
-	m_font(U"所持金: {} G"_fmt(currentMoney)).draw(moneyBasePos.x, moneyBasePos.y, ColorF(0.0));
+	//お金周り未実装
+	//m_font(U"所持金: {} G"_fmt(currentMoney)).draw(moneyBasePos.x, moneyBasePos.y, ColorF(0.0));
 
 	//画面左下にタイル説明表示
 	m_explanationUi.draw(10, win_y - 120);
